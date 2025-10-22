@@ -1,17 +1,16 @@
-# Server Dockerfile
 FROM node:20-alpine
 
 # Set working directory
-WORKDIR /app
+WORKDIR /src
 
-# Copy package files
-COPY package*.json ./
+# Copy package files from src subdirectory
+COPY src/package*.json ./
 
 # Install dependencies
 RUN npm install
 
-# Copy source code
-COPY . .
+# Copy all source code
+COPY src/ .
 
 # Expose port
 EXPOSE 5000
