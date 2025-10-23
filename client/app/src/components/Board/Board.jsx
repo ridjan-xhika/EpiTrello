@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { DragDropContext } from "@hello-pangea/dnd";
 import Column from './Column';
 import { useBoard } from '../../context/BoardContext';
 import '../../styles/board.css';
@@ -8,17 +8,17 @@ const Board = ({ board, onUpdate }) => {
   const [isAddingColumn, setIsAddingColumn] = useState(false);
   const [columnTitle, setColumnTitle] = useState('');
   const { addColumn, reorderCards } = useBoard();
+  const [localBoard, setLocalBoard] = useState(board);
 
   const handleAddColumn = async () => {
-    if (columnTitle.trim()) {
-      try {
-        await addColumn(board.id, columnTitle);
-        setColumnTitle('');
-        setIsAddingColumn(false);
-        if (onUpdate) await onUpdate();
-      } catch (error) {
-        alert('Failed to create column');
-      }
+    if (!columnTitle.trim()) return;
+    try {
+      await addColumn(localBoard.id, columnTitle);
+      setColumnTitle('');
+      setIsAddingColumn(false);
+      if (onUpdate) await onUpdate();
+    } catch (error) {
+      alert('Failed to create column');
     }
   };
 
@@ -28,41 +28,53 @@ const Board = ({ board, onUpdate }) => {
   };
 
   const onDragEnd = async (result) => {
-    const { source, destination } = result;
-
+    const { source, destination, draggableId } = result;
     if (!destination) return;
 
+    // same position, do nothing
     if (
       source.droppableId === destination.droppableId &&
       source.index === destination.index
-    ) {
-      return;
-    }
+    ) return;
 
+    const sourceColId = source.droppableId;
+    const destColId = destination.droppableId;
+
+    const newBoard = { ...localBoard };
+    const sourceColumn = newBoard.columns.find(c => c.id.toString() === sourceColId);
+    const destColumn = newBoard.columns.find(c => c.id.toString() === destColId);
+
+    // Remove card from source
+    const [movedCard] = sourceColumn.cards.splice(source.index, 1);
+
+    // Insert into destination
+    destColumn.cards.splice(destination.index, 0, movedCard);
+
+    // Update local state immediately (optimistic UI)
+    setLocalBoard(newBoard);
+
+    // Persist changes in backend
     try {
-      await reorderCards(
-        board.id,
-        source.droppableId,
-        destination.droppableId,
-        source.index,
-        destination.index
-      );
+      await reorderCards(localBoard.id, sourceColId, destColId, source.index, destination.index);
       if (onUpdate) await onUpdate();
     } catch (error) {
       console.error('Failed to reorder cards:', error);
       alert('Failed to reorder cards');
+
+      // Revert local state on failure
+      setLocalBoard(board);
     }
   };
 
   return (
-    <div className="board-container">
-      <DragDropContext onDragEnd={onDragEnd}>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className="board-container">
         <div className="board">
-          {board.columns.map((column) => (
+          {localBoard.columns.map((column) => (
             <Column 
               key={column.id} 
               column={column} 
-              boardId={board.id}
+              boardId={localBoard.id}
               onUpdate={onUpdate}
             />
           ))}
@@ -96,8 +108,8 @@ const Board = ({ board, onUpdate }) => {
             </button>
           )}
         </div>
-      </DragDropContext>
-    </div>
+      </div>
+    </DragDropContext>
   );
 };
 

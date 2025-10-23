@@ -10,13 +10,13 @@ import Register from '../pages/Register';
 import ProtectedRoute from '../components/ProtectedRoute';
 
 const AppRoutes = () => {
-  const { isAuthenticated } = useAuth(); // Use actual authentication state
+  const { isAuthenticated } = useAuth(); // Use actual auth state
 
   return (
     <>
       {/* Show navbar only if authenticated */}
       {isAuthenticated && <Navbar />}
-      
+
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<Home />} />
@@ -42,7 +42,7 @@ const AppRoutes = () => {
           } 
         />
 
-        {/* Fallback for unknown routes */}
+        {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
