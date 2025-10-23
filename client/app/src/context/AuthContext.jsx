@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import api from '../services/api';
 
 export const AuthContext = createContext();
 
@@ -12,106 +13,55 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const defaultUsers = [
-    {
-      id: '1',
-      username: 'admin',
-      email: 'admin@example.com',
-      password: 'admin123',
-      name: 'Admin User',
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: '2',
-      username: 'user',
-      email: 'user@example.com',
-      password: 'user123',
-      name: 'Regular User',
-      createdAt: new Date().toISOString(),
-    },
-  ];
-
   useEffect(() => {
-    const storedUsers = localStorage.getItem('trello_users');
-    const storedCurrentUser = localStorage.getItem('trello_current_user');
-
-    if (storedUsers) {
-      try {
-        setUsers(JSON.parse(storedUsers));
-      } catch (e) {
-        setUsers(defaultUsers);
-        localStorage.setItem('trello_users', JSON.stringify(defaultUsers));
+    const initAuth = async () => {
+      const token = localStorage.getItem('token');
+      
+      if (token) {
+        try {
+          const { user } = await api.getCurrentUser();
+          setCurrentUser(user);
+        } catch (error) {
+          console.error('Failed to get current user:', error);
+          localStorage.removeItem('token');
+        }
       }
-    } else {
-      setUsers(defaultUsers);
-      localStorage.setItem('trello_users', JSON.stringify(defaultUsers));
-    }
-
-    if (storedCurrentUser) {
-      try {
-        setCurrentUser(JSON.parse(storedCurrentUser));
-      } catch (e) {
-        localStorage.removeItem('trello_current_user');
-      }
-    }
-
-    setLoading(false);
-  }, []);
-
-  // register accepts email, password, name and optional username
-  const register = ({ email, password, name, username }) => {
-    const uname = username || email.split('@')[0];
-    const existingUser = users.find(
-      (u) => u.email === email || u.username === uname
-    );
-    if (existingUser) {
-      throw new Error('User with this email or username already exists');
-    }
-
-    const newUser = {
-      id: Date.now().toString(),
-      email,
-      username: uname,
-      password, // Note: in production you must hash passwords
-      name,
-      createdAt: new Date().toISOString(),
+      
+      setLoading(false);
     };
 
-    const updatedUsers = [...users, newUser];
-    setUsers(updatedUsers);
-    localStorage.setItem('trello_users', JSON.stringify(updatedUsers));
+    initAuth();
+  }, []);
 
-    return newUser;
+  const register = async ({ email, password, name, username }) => {
+    try {
+      const { user } = await api.register({ email, password, name, username });
+      setCurrentUser(user);
+      return user;
+    } catch (error) {
+      throw new Error(error.message || 'Registration failed');
+    }
   };
 
-  // login accepts either email or username as first arg
-  const login = (identifier, password) => {
-    const user = users.find(
-      (u) =>
-        (u.email === identifier || u.username === identifier) &&
-        u.password === password
-    );
-
-    if (!user) {
-      throw new Error('Invalid email/username or password');
+  const login = async (identifier, password) => {
+    try {
+      const { user } = await api.login({ identifier, password });
+      setCurrentUser(user);
+      return user;
+    } catch (error) {
+      throw new Error(error.message || 'Login failed');
     }
-
-    setCurrentUser(user);
-    localStorage.setItem('trello_current_user', JSON.stringify(user));
-    return user;
   };
 
   const logout = () => {
+    api.logout();
     setCurrentUser(null);
-    localStorage.removeItem('trello_current_user');
   };
 
   const value = {
     currentUser,
-    users,
     register,
     login,
     logout,

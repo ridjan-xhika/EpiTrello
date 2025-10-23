@@ -4,16 +4,21 @@ import Column from './Column';
 import { useBoard } from '../../context/BoardContext';
 import '../../styles/board.css';
 
-const Board = ({ board }) => {
+const Board = ({ board, onUpdate }) => {
   const [isAddingColumn, setIsAddingColumn] = useState(false);
   const [columnTitle, setColumnTitle] = useState('');
   const { addColumn, reorderCards } = useBoard();
 
-  const handleAddColumn = () => {
+  const handleAddColumn = async () => {
     if (columnTitle.trim()) {
-      addColumn(board.id, columnTitle);
-      setColumnTitle('');
-      setIsAddingColumn(false);
+      try {
+        await addColumn(board.id, columnTitle);
+        setColumnTitle('');
+        setIsAddingColumn(false);
+        if (onUpdate) await onUpdate();
+      } catch (error) {
+        alert('Failed to create column');
+      }
     }
   };
 
@@ -22,7 +27,7 @@ const Board = ({ board }) => {
     setIsAddingColumn(false);
   };
 
-  const onDragEnd = (result) => {
+  const onDragEnd = async (result) => {
     const { source, destination } = result;
 
     if (!destination) return;
@@ -34,13 +39,19 @@ const Board = ({ board }) => {
       return;
     }
 
-    reorderCards(
-      board.id,
-      source.droppableId,
-      destination.droppableId,
-      source.index,
-      destination.index
-    );
+    try {
+      await reorderCards(
+        board.id,
+        source.droppableId,
+        destination.droppableId,
+        source.index,
+        destination.index
+      );
+      if (onUpdate) await onUpdate();
+    } catch (error) {
+      console.error('Failed to reorder cards:', error);
+      alert('Failed to reorder cards');
+    }
   };
 
   return (
@@ -48,7 +59,12 @@ const Board = ({ board }) => {
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="board">
           {board.columns.map((column) => (
-            <Column key={column.id} column={column} boardId={board.id} />
+            <Column 
+              key={column.id} 
+              column={column} 
+              boardId={board.id}
+              onUpdate={onUpdate}
+            />
           ))}
 
           {isAddingColumn ? (
@@ -60,6 +76,7 @@ const Board = ({ board }) => {
                 onChange={(e) => setColumnTitle(e.target.value)}
                 className="form-input"
                 autoFocus
+                onKeyPress={(e) => e.key === 'Enter' && handleAddColumn()}
               />
               <div className="form-actions">
                 <button onClick={handleAddColumn} className="btn btn-primary">

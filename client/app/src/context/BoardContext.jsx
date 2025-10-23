@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import api from '../services/api';
+import { useAuth } from './AuthContext';
 
 const BoardContext = createContext();
 
@@ -11,164 +13,121 @@ export const useBoard = () => {
 };
 
 export const BoardProvider = ({ children }) => {
-  const [boards, setBoards] = useState([
-    {
-      id: '1',
-      title: 'Project Board',
-      columns: [
-        {
-          id: 'col-1',
-          title: 'To Do',
-          cards: [
-            { id: 'card-1', title: 'Task 1', description: 'Description for task 1' },
-            { id: 'card-2', title: 'Task 2', description: 'Description for task 2' }
-          ]
-        },
-        {
-          id: 'col-2',
-          title: 'In Progress',
-          cards: [
-            { id: 'card-3', title: 'Task 3', description: 'Description for task 3' }
-          ]
-        },
-        {
-          id: 'col-3',
-          title: 'Done',
-          cards: []
-        }
-      ]
+  const [boards, setBoards] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const { isAuthenticated } = useAuth();
+
+  const fetchBoards = async () => {
+    if (!isAuthenticated) return;
+    
+    try {
+      setLoading(true);
+      const { boards: fetchedBoards } = await api.getBoards();
+      setBoards(fetchedBoards);
+    } catch (error) {
+      console.error('Failed to fetch boards:', error);
+    } finally {
+      setLoading(false);
     }
-  ]);
-
-  const addBoard = (title) => {
-    const newBoard = {
-      id: Date.now().toString(),
-      title,
-      columns: []
-    };
-    setBoards([...boards, newBoard]);
-    return newBoard.id;
   };
 
-  const deleteBoard = (boardId) => {
-    setBoards(boards.filter(board => board.id !== boardId));
+  useEffect(() => {
+    fetchBoards();
+  }, [isAuthenticated]);
+
+  const addBoard = async (title) => {
+    try {
+      const { board } = await api.createBoard(title);
+      setBoards([...boards, { ...board, columnCount: 0 }]);
+      return board.id;
+    } catch (error) {
+      console.error('Failed to create board:', error);
+      throw error;
+    }
   };
 
-  const addColumn = (boardId, title) => {
-    setBoards(boards.map(board => {
-      if (board.id === boardId) {
-        return {
-          ...board,
-          columns: [...board.columns, {
-            id: `col-${Date.now()}`,
-            title,
-            cards: []
-          }]
-        };
-      }
-      return board;
-    }));
+  const deleteBoard = async (boardId) => {
+    try {
+      await api.deleteBoard(boardId);
+      setBoards(boards.filter(board => board.id !== boardId));
+    } catch (error) {
+      console.error('Failed to delete board:', error);
+      throw error;
+    }
   };
 
-  const deleteColumn = (boardId, columnId) => {
-    setBoards(boards.map(board => {
-      if (board.id === boardId) {
-        return {
-          ...board,
-          columns: board.columns.filter(col => col.id !== columnId)
-        };
-      }
-      return board;
-    }));
+  const addColumn = async (boardId, title) => {
+    try {
+      await api.createColumn(boardId, title);
+      // Refresh boards to update column count
+      await fetchBoards();
+    } catch (error) {
+      console.error('Failed to create column:', error);
+      throw error;
+    }
   };
 
-  const addCard = (boardId, columnId, title, description) => {
-    setBoards(boards.map(board => {
-      if (board.id === boardId) {
-        return {
-          ...board,
-          columns: board.columns.map(col => {
-            if (col.id === columnId) {
-              return {
-                ...col,
-                cards: [...col.cards, {
-                  id: `card-${Date.now()}`,
-                  title,
-                  description
-                }]
-              };
-            }
-            return col;
-          })
-        };
-      }
-      return board;
-    }));
+  const deleteColumn = async (boardId, columnId) => {
+    try {
+      await api.deleteColumn(columnId);
+      await fetchBoards();
+    } catch (error) {
+      console.error('Failed to delete column:', error);
+      throw error;
+    }
   };
 
-  const deleteCard = (boardId, columnId, cardId) => {
-    setBoards(boards.map(board => {
-      if (board.id === boardId) {
-        return {
-          ...board,
-          columns: board.columns.map(col => {
-            if (col.id === columnId) {
-              return {
-                ...col,
-                cards: col.cards.filter(card => card.id !== cardId)
-              };
-            }
-            return col;
-          })
-        };
-      }
-      return board;
-    }));
+  const addCard = async (boardId, columnId, title, description) => {
+    try {
+      await api.createCard(boardId, columnId, title, description);
+    } catch (error) {
+      console.error('Failed to create card:', error);
+      throw error;
+    }
   };
 
-  const updateCard = (boardId, columnId, cardId, updatedData) => {
-    setBoards(boards.map(board => {
-      if (board.id === boardId) {
-        return {
-          ...board,
-          columns: board.columns.map(col => {
-            if (col.id === columnId) {
-              return {
-                ...col,
-                cards: col.cards.map(card => {
-                  if (card.id === cardId) {
-                    return { ...card, ...updatedData };
-                  }
-                  return card;
-                })
-              };
-            }
-            return col;
-          })
-        };
-      }
-      return board;
-    }));
+  const deleteCard = async (boardId, columnId, cardId) => {
+    try {
+      await api.deleteCard(cardId);
+    } catch (error) {
+      console.error('Failed to delete card:', error);
+      throw error;
+    }
   };
 
-  const reorderCards = (boardId, sourceColumnId, destColumnId, sourceIndex, destIndex) => {
-    setBoards(boards.map(board => {
-      if (board.id === boardId) {
-        const newColumns = [...board.columns];
-        const sourceCol = newColumns.find(col => col.id === sourceColumnId);
-        const destCol = newColumns.find(col => col.id === destColumnId);
+  const updateCard = async (boardId, columnId, cardId, updatedData) => {
+    try {
+      await api.updateCard(cardId, updatedData.title, updatedData.description);
+    } catch (error) {
+      console.error('Failed to update card:', error);
+      throw error;
+    }
+  };
 
-        const [movedCard] = sourceCol.cards.splice(sourceIndex, 1);
-        destCol.cards.splice(destIndex, 0, movedCard);
+  const reorderCards = async (boardId, sourceColumnId, destColumnId, sourceIndex, destIndex) => {
+    try {
+      // Find the card being moved
+      const board = boards.find(b => b.id === boardId);
+      if (!board) return;
 
-        return { ...board, columns: newColumns };
-      }
-      return board;
-    }));
+      // We need to get the full board data to find the card
+      const { board: fullBoard } = await api.getBoard(boardId);
+      const sourceColumn = fullBoard.columns.find(col => col.id === sourceColumnId);
+      if (!sourceColumn) return;
+
+      const card = sourceColumn.cards[sourceIndex];
+      if (!card) return;
+
+      await api.reorderCard(boardId, card.id, sourceColumnId, destColumnId, sourceIndex, destIndex);
+    } catch (error) {
+      console.error('Failed to reorder cards:', error);
+      throw error;
+    }
   };
 
   const value = {
     boards,
+    loading,
     addBoard,
     deleteBoard,
     addColumn,
@@ -176,7 +135,8 @@ export const BoardProvider = ({ children }) => {
     addCard,
     deleteCard,
     updateCard,
-    reorderCards
+    reorderCards,
+    fetchBoards,
   };
 
   return (
