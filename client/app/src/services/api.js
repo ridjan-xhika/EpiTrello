@@ -1,4 +1,9 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+// Get API URL from environment variable or use default
+// In production builds, process.env is replaced at build time
+// eslint-disable-next-line no-undef
+const API_URL = (typeof process !== 'undefined' && process.env && process.env.REACT_APP_API_URL) 
+  ? process.env.REACT_APP_API_URL 
+  : 'http://localhost:5000/api';
 
 class ApiService {
   constructor() {
@@ -35,14 +40,36 @@ class ApiService {
       },
     };
 
-    const response = await fetch(`${API_URL}${endpoint}`, config);
-    const data = await response.json();
+    try {
+      const response = await fetch(`${API_URL}${endpoint}`, config);
+      
+      // Handle non-JSON responses
+      const contentType = response.headers.get('content-type');
+      let data;
+      
+      if (contentType && contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        data = { error: text || 'Server error' };
+      }
 
-    if (!response.ok) {
-      throw new Error(data.error || 'Something went wrong');
+      if (!response.ok) {
+        // If unauthorized, clear token
+        if (response.status === 401) {
+          this.setToken(null);
+        }
+        throw new Error(data.error || `Request failed with status ${response.status}`);
+      }
+
+      return data;
+    } catch (error) {
+      // Network error or fetch failed
+      if (error instanceof TypeError) {
+        throw new Error('Cannot connect to server. Please check if the backend is running.');
+      }
+      throw error;
     }
-
-    return data;
   }
 
   // Auth endpoints

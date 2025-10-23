@@ -1,38 +1,49 @@
 import React, { useState } from 'react';
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { Draggable } from "@hello-pangea/dnd";
 import Modal from '../Modal';
 import { useBoard } from '../../context/BoardContext';
 import '../../styles/card.css';
 
-const Card = ({ card, index, columnId, boardId }) => {
+const Card = ({ card, index, columnId, boardId, onUpdate }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(card.title);
-  const [editDescription, setEditDescription] = useState(card.description);
+  const [editDescription, setEditDescription] = useState(card.description || '');
   const { deleteCard, updateCard } = useBoard();
 
-  const handleDelete = () => {
-    deleteCard(boardId, columnId, card.id);
-    setIsModalOpen(false);
+  const handleDelete = async () => {
+    try {
+      await deleteCard(boardId, columnId, card.id);
+      setIsModalOpen(false);
+      if (onUpdate) await onUpdate();
+    } catch (error) {
+      alert('Failed to delete card');
+    }
   };
 
-  const handleSave = () => {
-    updateCard(boardId, columnId, card.id, {
-      title: editTitle,
-      description: editDescription
-    });
-    setIsEditing(false);
+  const handleSave = async () => {
+    try {
+      await updateCard(boardId, columnId, card.id, {
+        title: editTitle,
+        description: editDescription
+      });
+      setIsEditing(false);
+      setIsModalOpen(false);
+      if (onUpdate) await onUpdate();
+    } catch (error) {
+      alert('Failed to update card');
+    }
   };
 
   const handleCancel = () => {
     setEditTitle(card.title);
-    setEditDescription(card.description);
+    setEditDescription(card.description || '');
     setIsEditing(false);
   };
 
   return (
     <>
-      <Draggable draggableId={card.id} index={index}>
+      <Draggable draggableId={card.id.toString()} index={index}>
         {(provided, snapshot) => (
           <div
             ref={provided.innerRef}
@@ -51,7 +62,11 @@ const Card = ({ card, index, columnId, boardId }) => {
 
       <Modal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setIsEditing(false);
+          handleCancel();
+        }}
         title={isEditing ? 'Edit Card' : card.title}
       >
         {isEditing ? (

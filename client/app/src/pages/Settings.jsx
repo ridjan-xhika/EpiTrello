@@ -1,31 +1,86 @@
-import React from 'react';
-import { useBoard } from '../context/BoardContext';
+import React, { useState, useEffect } from 'react';
+import api from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 const Settings = () => {
-  const { boards } = useBoard();
+  const [stats, setStats] = useState({
+    totalBoards: 0,
+    totalColumns: 0,
+    totalCards: 0
+  });
+  const [loading, setLoading] = useState(true);
+  const { currentUser } = useAuth();
 
-  const totalColumns = boards.reduce((sum, board) => sum + board.columns.length, 0);
-  const totalCards = boards.reduce((sum, board) => {
-    return sum + board.columns.reduce((colSum, col) => colSum + col.cards.length, 0);
-  }, 0);
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const { boards } = await api.getBoards();
+        
+        let totalColumns = 0;
+        let totalCards = 0;
+
+        // Fetch full details for each board to count cards
+        const boardPromises = boards.map(board => api.getBoard(board.id));
+        const fullBoards = await Promise.all(boardPromises);
+
+        fullBoards.forEach(({ board }) => {
+          totalColumns += board.columns.length;
+          board.columns.forEach(column => {
+            totalCards += column.cards.length;
+          });
+        });
+
+        setStats({
+          totalBoards: boards.length,
+          totalColumns,
+          totalCards
+        });
+      } catch (error) {
+        console.error('Failed to fetch stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="page-container">
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="page-container">
       <h1>Settings</h1>
       
       <div className="settings-section">
+        <h2>User Profile</h2>
+        <div className="profile-info">
+          <p><strong>Name:</strong> {currentUser?.name}</p>
+          <p><strong>Email:</strong> {currentUser?.email}</p>
+          <p><strong>Username:</strong> {currentUser?.username}</p>
+        </div>
+      </div>
+
+      <div className="settings-section">
         <h2>Statistics</h2>
         <div className="stats-grid">
           <div className="stat-card">
-            <h3>{boards.length}</h3>
+            <h3>{stats.totalBoards}</h3>
             <p>Total Boards</p>
           </div>
           <div className="stat-card">
-            <h3>{totalColumns}</h3>
+            <h3>{stats.totalColumns}</h3>
             <p>Total Columns</p>
           </div>
           <div className="stat-card">
-            <h3>{totalCards}</h3>
+            <h3>{stats.totalCards}</h3>
             <p>Total Cards</p>
           </div>
         </div>
@@ -33,7 +88,7 @@ const Settings = () => {
 
       <div className="settings-section">
         <h2>About</h2>
-        <p>This is a Trello-like MVP built with React. All data is stored in-memory and will be lost on page refresh.</p>
+        <p>This is a Trello-like MVP built with React, Express, and MySQL. All data is persisted in the database.</p>
       </div>
 
       <div className="settings-section">
@@ -44,10 +99,12 @@ const Settings = () => {
           <li>Create cards with titles and descriptions</li>
           <li>Drag and drop cards between columns</li>
           <li>Edit and delete cards</li>
+          <li>User authentication with JWT</li>
+          <li>Data persistence with MySQL</li>
         </ul>
       </div>
     </div>
   );
 };
 
-export default Settings;
+export default Settings

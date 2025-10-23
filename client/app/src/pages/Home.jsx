@@ -4,27 +4,45 @@ import { useBoard } from '../context/BoardContext';
 import Modal from '../components/Modal';
 
 const Home = () => {
-  const { boards, addBoard, deleteBoard } = useBoard();
+  const { boards, addBoard, deleteBoard, loading } = useBoard();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [boardTitle, setBoardTitle] = useState('');
   const navigate = useNavigate();
 
-  const handleCreateBoard = () => {
+  const handleCreateBoard = async () => {
     if (boardTitle.trim()) {
-      const newBoardId = addBoard(boardTitle);
-      setBoardTitle('');
-      setIsModalOpen(false);
-      navigate(`/board/${newBoardId}`);
+      try {
+        const newBoardId = await addBoard(boardTitle);
+        setBoardTitle('');
+        setIsModalOpen(false);
+        navigate(`/board/${newBoardId}`);
+      } catch (error) {
+        alert('Failed to create board');
+      }
     }
   };
 
-  const handleDeleteBoard = (boardId, e) => {
+  const handleDeleteBoard = async (boardId, e) => {
     e.preventDefault();
     e.stopPropagation();
     if (window.confirm('Are you sure you want to delete this board?')) {
-      deleteBoard(boardId);
+      try {
+        await deleteBoard(boardId);
+      } catch (error) {
+        alert('Failed to delete board');
+      }
     }
   };
+
+  if (loading) {
+    return (
+      <div className="page-container">
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="page-container">
@@ -47,7 +65,7 @@ const Home = () => {
           >
             <div className="board-card-content">
               <h3>{board.title}</h3>
-              <p>{board.columns.length} columns</p>
+              <p>{board.columnCount || 0} columns</p>
             </div>
             <button
               onClick={(e) => handleDeleteBoard(board.id, e)}
@@ -67,7 +85,10 @@ const Home = () => {
 
       <Modal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setBoardTitle('');
+        }}
         title="Create New Board"
       >
         <div className="form-group">
@@ -79,6 +100,7 @@ const Home = () => {
             placeholder="Enter board title"
             className="form-input"
             autoFocus
+            onKeyPress={(e) => e.key === 'Enter' && handleCreateBoard()}
           />
         </div>
         <div className="form-actions">
@@ -86,7 +108,10 @@ const Home = () => {
             Create
           </button>
           <button
-            onClick={() => setIsModalOpen(false)}
+            onClick={() => {
+              setIsModalOpen(false);
+              setBoardTitle('');
+            }}
             className="btn btn-secondary"
           >
             Cancel

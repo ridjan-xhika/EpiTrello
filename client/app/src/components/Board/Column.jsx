@@ -1,21 +1,26 @@
 import React, { useState } from 'react';
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { Droppable } from "@hello-pangea/dnd";
 import Card from './Card';
 import { useBoard } from '../../context/BoardContext';
 import '../../styles/column.css';
 
-const Column = ({ column, boardId }) => {
+const Column = ({ column, boardId, onUpdate }) => {
   const [isAddingCard, setIsAddingCard] = useState(false);
   const [cardTitle, setCardTitle] = useState('');
   const [cardDescription, setCardDescription] = useState('');
   const { addCard, deleteColumn } = useBoard();
 
-  const handleAddCard = () => {
+  const handleAddCard = async () => {
     if (cardTitle.trim()) {
-      addCard(boardId, column.id, cardTitle, cardDescription);
-      setCardTitle('');
-      setCardDescription('');
-      setIsAddingCard(false);
+      try {
+        await addCard(boardId, column.id, cardTitle, cardDescription);
+        setCardTitle('');
+        setCardDescription('');
+        setIsAddingCard(false);
+        if (onUpdate) await onUpdate();
+      } catch (error) {
+        alert('Failed to create card');
+      }
     }
   };
 
@@ -25,9 +30,14 @@ const Column = ({ column, boardId }) => {
     setIsAddingCard(false);
   };
 
-  const handleDeleteColumn = () => {
+  const handleDeleteColumn = async () => {
     if (window.confirm(`Delete column "${column.title}"?`)) {
-      deleteColumn(boardId, column.id);
+      try {
+        await deleteColumn(boardId, column.id);
+        if (onUpdate) await onUpdate();
+      } catch (error) {
+        alert('Failed to delete column');
+      }
     }
   };
 
@@ -44,7 +54,7 @@ const Column = ({ column, boardId }) => {
         </button>
       </div>
 
-      <Droppable droppableId={column.id}>
+      <Droppable droppableId={column.id.toString()}>
         {(provided, snapshot) => (
           <div
             ref={provided.innerRef}
@@ -58,6 +68,7 @@ const Column = ({ column, boardId }) => {
                 index={index}
                 columnId={column.id}
                 boardId={boardId}
+                onUpdate={onUpdate}
               />
             ))}
             {provided.placeholder}
@@ -74,6 +85,7 @@ const Column = ({ column, boardId }) => {
             onChange={(e) => setCardTitle(e.target.value)}
             className="form-input"
             autoFocus
+            onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleAddCard()}
           />
           <textarea
             placeholder="Description (optional)"

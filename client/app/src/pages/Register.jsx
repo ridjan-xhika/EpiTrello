@@ -10,7 +10,7 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { register, login } = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -31,8 +31,7 @@ const Register = () => {
         throw new Error('Password must be at least 6 characters');
       }
 
-      register(email, password, name);
-      login(email, password);
+      await register({ email, password, name });
       navigate('/');
     } catch (err) {
       setError(err.message);
