@@ -1,6 +1,7 @@
 const express = require('express');
 const Board = require('../models/Board');
 const Column = require('../models/Column');
+const AuditLog = require('../models/AuditLog');
 const auth = require('../middleware/auth');
 const { canReadBoard, canWriteBoard, isOwner } = require('../middleware/permissions');
 

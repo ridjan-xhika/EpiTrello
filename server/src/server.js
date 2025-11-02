@@ -30,6 +30,7 @@ app.use('/api/lists', listRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/sharing', sharingRoutes);
 app.use('/api/organizations', organizationRoutes);
+app.use('/api', auditRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
