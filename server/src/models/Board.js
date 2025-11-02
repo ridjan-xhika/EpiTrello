@@ -1,14 +1,14 @@
 const db = require('../config/database');
 
 class Board {
-  static async create(title, userId) {
+  static async create(title, userId, organizationId = null) {
     const connection = await db.getConnection();
     try {
       await connection.beginTransaction();
 
       const [result] = await connection.execute(
-        'INSERT INTO boards (title, user_id) VALUES (?, ?)',
-        [title, userId]
+        'INSERT INTO boards (title, user_id, organization_id) VALUES (?, ?, ?)',
+        [title, userId, organizationId]
       );
 
       const boardId = result.insertId;
@@ -31,8 +31,10 @@ class Board {
 
   static async findByUserId(userId) {
     const [rows] = await db.execute(
-      `SELECT b.* FROM boards b
+      `SELECT b.*, o.name as organization_name, o.display_name as organization_display_name
+       FROM boards b
        INNER JOIN board_members bm ON b.id = bm.board_id
+       LEFT JOIN organizations o ON b.organization_id = o.id
        WHERE bm.user_id = ?
        ORDER BY b.updated_at DESC`,
       [userId]
@@ -42,8 +44,10 @@ class Board {
 
   static async findById(boardId, userId) {
     const [rows] = await db.execute(
-      `SELECT b.* FROM boards b
+      `SELECT b.*, o.name as organization_name, o.display_name as organization_display_name
+       FROM boards b
        INNER JOIN board_members bm ON b.id = bm.board_id
+       LEFT JOIN organizations o ON b.organization_id = o.id
        WHERE b.id = ? AND bm.user_id = ?`,
       [boardId, userId]
     );
@@ -79,6 +83,90 @@ class Board {
        ORDER BY c.position`,
       [boardId]
     );
+
+    // Get labels, members, and checklists for all cards
+    const cardIds = cards.map(c => c.id);
+    
+    // Initialize empty arrays for all cards and convert boolean fields
+    cards.forEach(card => {
+      card.completed = Boolean(card.completed);
+      card.labels = [];
+      card.members = [];
+      card.checklists = [];
+      card.comments = [];
+      card.attachments = [];
+    });
+    
+    if (cardIds.length > 0) {
+      const placeholders = cardIds.map(() => '?').join(',');
+      
+      // Get all labels
+      const [labels] = await db.execute(
+        `SELECT * FROM card_labels WHERE card_id IN (${placeholders})`,
+        cardIds
+      );
+      
+      // Get all members
+      const [members] = await db.execute(
+        `SELECT cm.card_id, cm.user_id, u.name, u.username, u.email 
+         FROM card_members cm 
+         JOIN users u ON cm.user_id = u.id 
+         WHERE cm.card_id IN (${placeholders})`,
+        cardIds
+      );
+      
+      // Get all checklists
+      const [checklists] = await db.execute(
+        `SELECT * FROM card_checklists WHERE card_id IN (${placeholders}) ORDER BY position`,
+        cardIds
+      );
+      
+      // Get comments count for each card
+      const [comments] = await db.execute(
+        `SELECT card_id, COUNT(*) as count FROM card_comments WHERE card_id IN (${placeholders}) GROUP BY card_id`,
+        cardIds
+      );
+      
+      // Get attachments count for each card
+      const [attachments] = await db.execute(
+        `SELECT card_id, COUNT(*) as count FROM card_attachments WHERE card_id IN (${placeholders}) GROUP BY card_id`,
+        cardIds
+      );
+      
+      // Get all checklist items
+      const checklistIds = checklists.map(cl => cl.id);
+      let checklistItems = [];
+      if (checklistIds.length > 0) {
+        const checklistPlaceholders = checklistIds.map(() => '?').join(',');
+        const [items] = await db.execute(
+          `SELECT ci.*, u.name as assigned_name, u.username as assigned_username
+           FROM checklist_items ci
+           LEFT JOIN users u ON ci.assigned_to = u.id
+           WHERE ci.checklist_id IN (${checklistPlaceholders}) 
+           ORDER BY ci.position`,
+          checklistIds
+        );
+        checklistItems = items;
+      }
+      
+      // Attach items to checklists
+      checklists.forEach(checklist => {
+        checklist.items = checklistItems.filter(item => item.checklist_id === checklist.id);
+      });
+      
+      // Attach all data to cards
+      cards.forEach(card => {
+        card.labels = labels.filter(l => l.card_id === card.id);
+        card.members = members.filter(m => m.card_id === card.id);
+        card.checklists = checklists.filter(cl => cl.card_id === card.id);
+        
+        // Add comments and attachments as arrays with count
+        const commentCount = comments.find(c => c.card_id === card.id);
+        const attachmentCount = attachments.find(a => a.card_id === card.id);
+        card.comments = commentCount ? Array(parseInt(commentCount.count)).fill({}) : [];
+        card.attachments = attachmentCount ? Array(parseInt(attachmentCount.count)).fill({}) : [];
+      });
+    }
 
     // Map cards to columns
     const columnsWithCards = columns.map(column => ({

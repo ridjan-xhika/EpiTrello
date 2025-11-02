@@ -47,13 +47,26 @@ const Home = () => {
   return (
     <div className="page-container">
       <div className="home-header">
-        <h1>My Boards</h1>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="btn btn-primary"
-        >
-          Create New Board
-        </button>
+        <h1>
+          <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" style={{marginRight: '8px', verticalAlign: 'text-bottom'}}>
+            <path d="M0 2a2 2 0 012-2h4a2 2 0 012 2v12a2 2 0 01-2 2H2a2 2 0 01-2-2V2zm8 0a2 2 0 012-2h4a2 2 0 012 2v8a2 2 0 01-2 2h-4a2 2 0 01-2-2V2z"/>
+          </svg>
+          Your Boards
+        </h1>
+        <div style={{display: 'flex', gap: '0.75rem'}}>
+          <button
+            onClick={() => navigate('/organizations')}
+            className="btn btn-secondary"
+          >
+            Organizations
+          </button>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="btn btn-primary"
+          >
+            Create new board
+          </button>
+        </div>
       </div>
 
       <div className="boards-grid">
@@ -65,21 +78,45 @@ const Home = () => {
           >
             <div className="board-card-content">
               <h3>{board.title}</h3>
-              <p>{board.columnCount || 0} columns</p>
+              <p>{board.columnCount || 0} {board.columnCount === 1 ? 'list' : 'lists'}</p>
             </div>
             <button
               onClick={(e) => handleDeleteBoard(board.id, e)}
               className="board-card-delete"
+              title="Delete board"
             >
               ×
             </button>
           </Link>
         ))}
+        
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="board-card board-card-create"
+          style={{
+            background: 'rgba(9, 30, 66, 0.08)',
+            color: '#172b4d',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: 'none',
+            cursor: 'pointer'
+          }}
+        >
+          <div>
+            <div style={{fontSize: '1.5rem', marginBottom: '4px'}}>+</div>
+            <div style={{fontSize: '0.875rem', fontWeight: 600}}>Create new board</div>
+          </div>
+        </button>
       </div>
 
       {boards.length === 0 && (
         <div className="empty-state">
-          <p>No boards yet. Create your first board to get started!</p>
+          <svg width="64" height="64" viewBox="0 0 16 16" fill="currentColor" style={{marginBottom: '1rem', opacity: 0.5}}>
+            <path d="M0 2a2 2 0 012-2h4a2 2 0 012 2v12a2 2 0 01-2 2H2a2 2 0 01-2-2V2zm8 0a2 2 0 012-2h4a2 2 0 012 2v8a2 2 0 01-2 2h-4a2 2 0 01-2-2V2z"/>
+          </svg>
+          <h2>No boards yet</h2>
+          <p>Create your first board to get started with organizing your work!</p>
         </div>
       )}
 
@@ -89,15 +126,15 @@ const Home = () => {
           setIsModalOpen(false);
           setBoardTitle('');
         }}
-        title="Create New Board"
+        title="Create board"
       >
         <div className="form-group">
-          <label>Board Title</label>
+          <label>Board title</label>
           <input
             type="text"
             value={boardTitle}
             onChange={(e) => setBoardTitle(e.target.value)}
-            placeholder="Enter board title"
+            placeholder="e.g. Project Planning"
             className="form-input"
             autoFocus
             onKeyPress={(e) => e.key === 'Enter' && handleCreateBoard()}
@@ -105,7 +142,7 @@ const Home = () => {
         </div>
         <div className="form-actions">
           <button onClick={handleCreateBoard} className="btn btn-primary">
-            Create
+            Create board
           </button>
           <button
             onClick={() => {

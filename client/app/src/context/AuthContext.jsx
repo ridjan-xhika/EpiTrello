@@ -60,11 +60,17 @@ export const AuthProvider = ({ children }) => {
     setCurrentUser(null);
   };
 
+  const updateUser = (updatedUser) => {
+    setCurrentUser(updatedUser);
+  };
+
   const value = {
     currentUser,
+    user: currentUser, // Add alias for consistency
     register,
     login,
     logout,
+    updateUser,
     loading,
     isAuthenticated: !!currentUser,
   };

@@ -9,6 +9,10 @@ const boardRoutes = require('./routes/boards');
 const columnRoutes = require('./routes/columns');
 const cardRoutes = require('./routes/cards');
 const listRoutes = require('./routes/lists');
+const profileRoutes = require('./routes/profile');
+const sharingRoutes = require('./routes/sharing');
+const organizationRoutes = require('./routes/organizations');
+const auditRoutes = require('./routes/audit');
 
 const app = express();
 
@@ -23,6 +27,9 @@ app.use('/api/boards', boardRoutes);
 app.use('/api/columns', columnRoutes);
 app.use('/api/cards', cardRoutes);
 app.use('/api/lists', listRoutes);
+app.use('/api/profile', profileRoutes);
+app.use('/api/sharing', sharingRoutes);
+app.use('/api/organizations', organizationRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

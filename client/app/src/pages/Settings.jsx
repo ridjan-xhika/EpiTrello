@@ -57,10 +57,8 @@ const Settings = () => {
 
   return (
     <div className="page-container">
-      <h1>Settings</h1>
-      
       <div className="settings-section">
-        <h2>User Profile</h2>
+        <h2>👤 Account</h2>
         <div className="profile-info">
           <p><strong>Name:</strong> {currentUser?.name}</p>
           <p><strong>Email:</strong> {currentUser?.email}</p>
@@ -69,37 +67,40 @@ const Settings = () => {
       </div>
 
       <div className="settings-section">
-        <h2>Statistics</h2>
+        <h2>📊 Your Activity</h2>
         <div className="stats-grid">
           <div className="stat-card">
             <h3>{stats.totalBoards}</h3>
-            <p>Total Boards</p>
+            <p>BOARDS</p>
           </div>
           <div className="stat-card">
             <h3>{stats.totalColumns}</h3>
-            <p>Total Columns</p>
+            <p>LISTS</p>
           </div>
           <div className="stat-card">
             <h3>{stats.totalCards}</h3>
-            <p>Total Cards</p>
+            <p>CARDS</p>
           </div>
         </div>
       </div>
 
       <div className="settings-section">
-        <h2>About</h2>
-        <p>This is a Trello-like MVP built with React, Express, and MySQL. All data is persisted in the database.</p>
+        <h2>ℹ️ About EpiTrelloo</h2>
+        <p style={{color: '#5e6c84', fontSize: '0.875rem', lineHeight: '1.6'}}>
+          A Trello-inspired project management tool built with React, Express, and MySQL. 
+          Organize your work with boards, lists, and cards.
+        </p>
       </div>
 
       <div className="settings-section">
-        <h2>Features</h2>
+        <h2>✨ Features</h2>
         <ul className="features-list">
           <li>Create and manage multiple boards</li>
-          <li>Add columns to organize your workflow</li>
+          <li>Add lists to organize your workflow</li>
           <li>Create cards with titles and descriptions</li>
-          <li>Drag and drop cards between columns</li>
+          <li>Drag and drop cards between lists</li>
           <li>Edit and delete cards</li>
-          <li>User authentication with JWT</li>
+          <li>User authentication with sessions</li>
           <li>Data persistence with MySQL</li>
         </ul>
       </div>

@@ -3,57 +3,103 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  background: var(--board-bg);
+  transition: background 0.3s ease;
+  position: relative;
+}
+
+.board-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.1) 0%, transparent 50%),
+    linear-gradient(135deg, rgba(0, 0, 0, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  animation: subtleMove 20s ease-in-out infinite;
+}
+
+@keyframes subtleMove {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
 }
 
 .board-page-header {
-  padding: 1rem 2rem;
-  background: #fff;
-  border-bottom: 1px solid #e0e0e0;
+  padding: 16px 24px;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(16px) saturate(180%);
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  z-index: 10;
+  position: relative;
 }
 
 .board-container {
   flex: 1;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 1rem;
+  padding: 16px;
+  position: relative;
+  z-index: 1;
 }
 
 .board {
   display: flex;
-  gap: 1rem;
+  gap: 16px;
   height: 100%;
-  padding-bottom: 1rem;
   min-height: min-content;
+  align-items: flex-start;
+  padding-bottom: 16px;
 }
 
 .add-column-button,
 .add-column-form {
-  min-width: 280px;
+  min-width: 272px;
+  width: 272px;
   flex-shrink: 0;
 }
 
 .add-column-button {
   height: fit-content;
-  padding: 0.75rem 1rem;
-  background: rgba(0, 0, 0, 0.04);
-  border: none;
-  border-radius: 8px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
   cursor: pointer;
-  font-size: 0.9rem;
-  color: #5e6c84;
-  transition: background 0.2s;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
 .add-column-button:hover {
-  background: rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  color: white;
 }
 
 .add-column-form {
-  background: #f4f5f7;
-  padding: 0.75rem;
-  border-radius: 8px;
+  background: var(--bg-tertiary);
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transition: background 0.2s ease;
+  border: 1px solid var(--border-color);
 }

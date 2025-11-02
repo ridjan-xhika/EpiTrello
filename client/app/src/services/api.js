@@ -104,10 +104,12 @@ class ApiService {
     return this.request(`/boards/${boardId}`);
   }
 
-  async createBoard(title) {
+  async createBoard(data) {
+    // Support both string (legacy) and object formats
+    const payload = typeof data === 'string' ? { title: data } : data;
     return this.request('/boards', {
       method: 'POST',
-      body: JSON.stringify({ title }),
+      body: JSON.stringify(payload),
     });
   }
 
@@ -146,10 +148,15 @@ class ApiService {
     });
   }
 
-  async updateCard(cardId, title, description) {
+  async updateCard(cardId, data) {
+    // Support both old format (title, description) and new format (data object)
+    const payload = typeof data === 'string' 
+      ? { title: data, description: arguments[2] } 
+      : data;
+    
     return this.request(`/cards/${cardId}`, {
       method: 'PUT',
-      body: JSON.stringify({ title, description }),
+      body: JSON.stringify(payload),
     });
   }
 
@@ -164,6 +171,96 @@ class ApiService {
       method: 'POST',
       body: JSON.stringify({ boardId, cardId, sourceColumnId, destColumnId, sourceIndex, destIndex }),
     });
+  }
+
+  // Card details
+  async getCard(cardId) {
+    return this.request(`/cards/${cardId}`);
+  }
+
+  // Card labels
+  async addCardLabel(cardId, name, color) {
+    return this.request(`/cards/${cardId}/labels`, {
+      method: 'POST',
+      body: JSON.stringify({ name, color }),
+    });
+  }
+
+  async removeCardLabel(cardId, labelId) {
+    return this.request(`/cards/${cardId}/labels/${labelId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Card members
+  async addCardMember(cardId, userId) {
+    return this.request(`/cards/${cardId}/members`, {
+      method: 'POST',
+      body: JSON.stringify({ userId }),
+    });
+  }
+
+  async removeCardMember(cardId, userId) {
+    return this.request(`/cards/${cardId}/members/${userId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Card checklists
+  async addChecklist(cardId, title) {
+    return this.request(`/cards/${cardId}/checklists`, {
+      method: 'POST',
+      body: JSON.stringify({ title }),
+    });
+  }
+
+  async deleteChecklist(cardId, checklistId) {
+    return this.request(`/cards/${cardId}/checklists/${checklistId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async addChecklistItem(cardId, checklistId, text, assigned_to = null, due_date = null) {
+    return this.request(`/cards/${cardId}/checklists/${checklistId}/items`, {
+      method: 'POST',
+      body: JSON.stringify({ text, assigned_to, due_date }),
+    });
+  }
+
+  async updateChecklistItem(cardId, checklistId, itemId, data) {
+    return this.request(`/cards/${cardId}/checklists/${checklistId}/items/${itemId}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteChecklistItem(cardId, checklistId, itemId) {
+    return this.request(`/cards/${cardId}/checklists/${checklistId}/items/${itemId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Card comments
+  async getCardComments(cardId) {
+    return this.request(`/cards/${cardId}/comments`);
+  }
+
+  async addCardComment(cardId, comment) {
+    return this.request(`/cards/${cardId}/comments`, {
+      method: 'POST',
+      body: JSON.stringify({ comment }),
+    });
+  }
+
+  async deleteCardComment(cardId, commentId) {
+    return this.request(`/cards/${cardId}/comments/${commentId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Card activity
+  async getCardActivity(cardId) {
+    return this.request(`/cards/${cardId}/activity`);
   }
 
   // List endpoints
@@ -189,6 +286,141 @@ class ApiService {
     return this.request(`/lists/${listId}`, {
       method: 'DELETE',
     });
+  }
+
+  // Profile endpoints
+  async getProfile() {
+    return this.request('/profile/me');
+  }
+
+  async getUserProfile(userId) {
+    return this.request(`/profile/${userId}`);
+  }
+
+  async updateProfile(profileData) {
+    return this.request('/profile/me', {
+      method: 'PUT',
+      body: JSON.stringify(profileData),
+    });
+  }
+
+  async updatePassword(passwordData) {
+    return this.request('/profile/password', {
+      method: 'PUT',
+      body: JSON.stringify(passwordData),
+    });
+  }
+
+  // Sharing endpoints
+  async getBoardMembers(boardId) {
+    return this.request(`/sharing/${boardId}/members`);
+  }
+
+  async inviteToBoard(boardId, email, role) {
+    return this.request(`/sharing/${boardId}/invite`, {
+      method: 'POST',
+      body: JSON.stringify({ email, role }),
+    });
+  }
+
+  async getPendingInvitations() {
+    return this.request('/sharing/invitations');
+  }
+
+  async acceptInvitation(token) {
+    return this.request(`/sharing/invitations/${token}/accept`, {
+      method: 'POST',
+    });
+  }
+
+  async declineInvitation(token) {
+    return this.request(`/sharing/invitations/${token}/decline`, {
+      method: 'POST',
+    });
+  }
+
+  async updateMemberRole(boardId, userId, role) {
+    return this.request(`/sharing/${boardId}/members/${userId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ role }),
+    });
+  }
+
+  async removeMember(boardId, userId) {
+    return this.request(`/sharing/${boardId}/members/${userId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async getBoardRole(boardId) {
+    return this.request(`/sharing/${boardId}/role`);
+  }
+
+  // Organizations
+  async getOrganizations() {
+    return this.request('/organizations');
+  }
+
+  async getOrganization(id) {
+    return this.request(`/organizations/${id}`);
+  }
+
+  async createOrganization(data) {
+    return this.request('/organizations', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateOrganization(id, data) {
+    return this.request(`/organizations/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteOrganization(id) {
+    return this.request(`/organizations/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async getOrganizationMembers(id) {
+    return this.request(`/organizations/${id}/members`);
+  }
+
+  async inviteToOrganization(id, email, role) {
+    return this.request(`/organizations/${id}/invite`, {
+      method: 'POST',
+      body: JSON.stringify({ email, role }),
+    });
+  }
+
+  async getOrganizationInvitations(id) {
+    return this.request(`/organizations/${id}/invitations`);
+  }
+
+  async acceptOrganizationInvitation(token) {
+    return this.request(`/organizations/invitations/${token}/accept`, {
+      method: 'POST',
+    });
+  }
+
+  async updateOrganizationMemberRole(orgId, userId, role) {
+    return this.request(`/organizations/${orgId}/members/${userId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ role }),
+    });
+  }
+
+  async removeOrganizationMember(orgId, userId) {
+    return this.request(`/organizations/${orgId}/members/${userId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async getOrganizationBoards(id) {
+    return this.request(`/organizations/${id}/boards`);
   }
 
   logout() {

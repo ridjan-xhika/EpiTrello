@@ -4,13 +4,17 @@ import Card from './Card';
 import { useBoard } from '../../context/BoardContext';
 import '../../styles/column.css';
 
-const Column = ({ column, boardId, onUpdate }) => {
+const Column = ({ column, boardId, onUpdate, canWrite = true }) => {
   const [isAddingCard, setIsAddingCard] = useState(false);
   const [cardTitle, setCardTitle] = useState('');
   const [cardDescription, setCardDescription] = useState('');
   const { addCard, deleteColumn } = useBoard();
 
   const handleAddCard = async () => {
+    if (!canWrite) {
+      alert('You only have read-only access to this board');
+      return;
+    }
     if (cardTitle.trim()) {
       try {
         await addCard(boardId, column.id, cardTitle, cardDescription);
@@ -31,6 +35,10 @@ const Column = ({ column, boardId, onUpdate }) => {
   };
 
   const handleDeleteColumn = async () => {
+    if (!canWrite) {
+      alert('You only have read-only access to this board');
+      return;
+    }
     if (window.confirm(`Delete column "${column.title}"?`)) {
       try {
         await deleteColumn(boardId, column.id);
@@ -45,13 +53,15 @@ const Column = ({ column, boardId, onUpdate }) => {
     <div className="column">
       <div className="column-header">
         <h3 className="column-title">{column.title}</h3>
-        <button 
-          onClick={handleDeleteColumn} 
-          className="column-delete"
-          title="Delete column"
-        >
-          ×
-        </button>
+        {canWrite && (
+          <button 
+            onClick={handleDeleteColumn} 
+            className="column-delete"
+            title="Delete column"
+          >
+            ×
+          </button>
+        )}
       </div>
 
       <Droppable droppableId={column.id.toString()}>
@@ -67,8 +77,10 @@ const Column = ({ column, boardId, onUpdate }) => {
                 card={card}
                 index={index}
                 columnId={column.id}
+                columnTitle={column.title}
                 boardId={boardId}
                 onUpdate={onUpdate}
+                canWrite={canWrite}
               />
             ))}
             {provided.placeholder}
@@ -100,12 +112,14 @@ const Column = ({ column, boardId, onUpdate }) => {
           </div>
         </div>
       ) : (
-        <button
-          onClick={() => setIsAddingCard(true)}
-          className="add-card-button"
-        >
-          + Add a card
-        </button>
+        canWrite && (
+          <button
+            onClick={() => setIsAddingCard(true)}
+            className="add-card-button"
+          >
+            + Add a card
+          </button>
+        )
       )}
     </div>
   );

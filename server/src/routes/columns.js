@@ -2,6 +2,7 @@ const express = require('express');
 const Column = require('../models/Column');
 const Board = require('../models/Board');
 const auth = require('../middleware/auth');
+const { canWriteBoard } = require('../middleware/permissions');
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ const verifyBoardAccess = async (req, res, next) => {
 };
 
 // Create column
-router.post('/', auth, verifyBoardAccess, async (req, res) => {
+router.post('/', auth, canWriteBoard, verifyBoardAccess, async (req, res) => {
   try {
     const { title, boardId } = req.body;
 
@@ -48,7 +49,7 @@ router.post('/', auth, verifyBoardAccess, async (req, res) => {
 });
 
 // Update column
-router.put('/:id', auth, async (req, res) => {
+router.put('/:id', auth, canWriteBoard, async (req, res) => {
   try {
     const { title } = req.body;
 
@@ -74,7 +75,7 @@ router.put('/:id', auth, async (req, res) => {
 });
 
 // Delete column
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', auth, canWriteBoard, async (req, res) => {
   try {
     const success = await Column.delete(req.params.id);
 

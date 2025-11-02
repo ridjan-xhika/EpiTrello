@@ -5,12 +5,16 @@ import Navbar from '../components/Navbar';
 import Home from '../pages/Home';
 import BoardPage from '../pages/BoardPage';
 import Settings from '../pages/Settings';
+import Profile from '../pages/Profile';
+import UserProfile from '../pages/UserProfile';
+import Organizations from '../pages/Organizations';
+import OrganizationDetail from '../pages/OrganizationDetail';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import ProtectedRoute from '../components/ProtectedRoute';
 
 const AppRoutes = () => {
-  const { isAuthenticated } = useAuth(); // Use actual auth state
+  const { isAuthenticated } = useAuth();
 
   return (
     <>
@@ -18,11 +22,7 @@ const AppRoutes = () => {
       {isAuthenticated && <Navbar />}
 
       <Routes>
-        {/* Public routes */}
-        <Route path="/" element={<Home />} />
-        <Route path="/board/:id" element={<BoardPage />} />
-
-        {/* Authentication routes */}
+        {/* Authentication routes - redirect to home if already logged in */}
         <Route 
           path="/login" 
           element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} 
@@ -32,12 +32,60 @@ const AppRoutes = () => {
           element={isAuthenticated ? <Navigate to="/" replace /> : <Register />} 
         />
 
-        {/* Protected route */}
+        {/* Protected routes - require authentication */}
+        <Route 
+          path="/" 
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/board/:id" 
+          element={
+            <ProtectedRoute>
+              <BoardPage />
+            </ProtectedRoute>
+          } 
+        />
         <Route 
           path="/settings" 
           element={
             <ProtectedRoute>
               <Settings />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/profile" 
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/user/:userId" 
+          element={
+            <ProtectedRoute>
+              <UserProfile />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/organizations" 
+          element={
+            <ProtectedRoute>
+              <Organizations />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/organizations/:id" 
+          element={
+            <ProtectedRoute>
+              <OrganizationDetail />
             </ProtectedRoute>
           } 
         />

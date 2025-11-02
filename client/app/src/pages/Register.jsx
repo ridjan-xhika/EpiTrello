@@ -44,61 +44,69 @@ const Register = () => {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <h1>Trello MVP</h1>
-          <h2>Create your account</h2>
+          <svg className="trello-logo" width="150" height="32" viewBox="0 0 150 32" fill="none">
+            <rect x="0" y="0" width="10" height="32" rx="2" fill="#0079bf"/>
+            <rect x="14" y="0" width="10" height="24" rx="2" fill="#0079bf"/>
+            <text x="32" y="24" fontFamily="Arial, sans-serif" fontSize="24" fontWeight="bold" fill="#172b4d">EpiTrelloo</text>
+          </svg>
+          <h2>Sign up for your account</h2>
         </div>
 
-        {error && <div className="auth-error">{error}</div>}
+        {error && (
+          <div className="auth-error">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm1 13H7V7h2v6zm0-8H7V3h2v2z"/>
+            </svg>
+            <span>{error}</span>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
-            <label htmlFor="name">Full Name</label>
             <input
               id="name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="form-input"
-              placeholder="Enter your full name"
+              placeholder="Enter full name"
               disabled={loading}
+              autoFocus
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">Email</label>
             <input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="form-input"
-              placeholder="Enter your email"
+              placeholder="Enter email"
               disabled={loading}
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="form-input"
-              placeholder="Enter your password"
+              placeholder="Create password"
               disabled={loading}
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
             <input
               id="confirmPassword"
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               className="form-input"
-              placeholder="Confirm your password"
+              placeholder="Confirm password"
               disabled={loading}
             />
           </div>
@@ -108,15 +116,14 @@ const Register = () => {
             className="btn btn-primary btn-full"
             disabled={loading}
           >
-            {loading ? 'Creating account...' : 'Sign Up'}
+            {loading ? 'Creating account...' : 'Sign up'}
           </button>
         </form>
 
         <div className="auth-footer">
-          <p>
-            Already have an account?{' '}
-            <Link to="/login" className="auth-link">Log in</Link>
-          </p>
+          <Link to="/login" className="auth-link">
+            Already have an account? Log in
+          </Link>
         </div>
       </div>
     </div>

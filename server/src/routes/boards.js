@@ -2,6 +2,7 @@ const express = require('express');
 const Board = require('../models/Board');
 const Column = require('../models/Column');
 const auth = require('../middleware/auth');
+const { canReadBoard, canWriteBoard, isOwner } = require('../middleware/permissions');
 
 const router = express.Router();
 
@@ -29,7 +30,7 @@ router.get('/', auth, async (req, res) => {
 });
 
 // Get single board with details
-router.get('/:id', auth, async (req, res) => {
+router.get('/:id', auth, canReadBoard, async (req, res) => {
   try {
     const board = await Board.getWithDetails(req.params.id, req.userId);
     
@@ -47,13 +48,13 @@ router.get('/:id', auth, async (req, res) => {
 // Create board
 router.post('/', auth, async (req, res) => {
   try {
-    const { title } = req.body;
+    const { title, organization_id } = req.body;
 
     if (!title || !title.trim()) {
       return res.status(400).json({ error: 'Board title is required' });
     }
 
-    const boardId = await Board.create(title, req.userId);
+    const boardId = await Board.create(title, req.userId, organization_id || null);
     const board = await Board.getWithDetails(boardId, req.userId);
 
     res.status(201).json({ 
@@ -67,7 +68,7 @@ router.post('/', auth, async (req, res) => {
 });
 
 // Delete board
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', auth, isOwner, async (req, res) => {
   try {
     const success = await Board.delete(req.params.id, req.userId);
 

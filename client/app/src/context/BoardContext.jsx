@@ -106,19 +106,33 @@ export const BoardProvider = ({ children }) => {
 
   const reorderCards = async (boardId, sourceColumnId, destColumnId, sourceIndex, destIndex) => {
     try {
-      // Find the card being moved
-      const board = boards.find(b => b.id === boardId);
-      if (!board) return;
+      // Convert to numbers if they're strings
+      const srcColId = parseInt(sourceColumnId);
+      const destColId = parseInt(destColumnId);
+      const srcIdx = parseInt(sourceIndex);
+      const destIdx = parseInt(destIndex);
 
       // We need to get the full board data to find the card
       const { board: fullBoard } = await api.getBoard(boardId);
-      const sourceColumn = fullBoard.columns.find(col => col.id === sourceColumnId);
-      if (!sourceColumn) return;
+      const sourceColumn = fullBoard.columns.find(col => col.id === srcColId);
+      if (!sourceColumn) {
+        console.error('Source column not found:', srcColId);
+        return;
+      }
 
-      const card = sourceColumn.cards[sourceIndex];
-      if (!card) return;
+      const card = sourceColumn.cards[srcIdx];
+      if (!card) {
+        console.error('Card not found at index:', srcIdx);
+        return;
+      }
 
-      await api.reorderCard(boardId, card.id, sourceColumnId, destColumnId, sourceIndex, destIndex);
+      console.log('Reordering card:', {
+        cardId: card.id,
+        from: `column ${srcColId} index ${srcIdx}`,
+        to: `column ${destColId} index ${destIdx}`
+      });
+
+      await api.reorderCard(boardId, card.id, srcColId, destColId, srcIdx, destIdx);
     } catch (error) {
       console.error('Failed to reorder cards:', error);
       throw error;

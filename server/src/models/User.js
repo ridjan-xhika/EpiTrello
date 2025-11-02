@@ -46,6 +46,44 @@ class User {
     );
     return rows[0];
   }
+
+  static async updateProfile(userId, { name, username, email, bio }) {
+    const updates = [];
+    const values = [];
+
+    if (name !== undefined) {
+      updates.push('name = ?');
+      values.push(name);
+    }
+    if (username !== undefined) {
+      updates.push('username = ?');
+      values.push(username);
+    }
+    if (email !== undefined) {
+      updates.push('email = ?');
+      values.push(email);
+    }
+    if (bio !== undefined) {
+      updates.push('bio = ?');
+      values.push(bio);
+    }
+
+    if (updates.length === 0) return;
+
+    values.push(userId);
+    await db.execute(
+      `UPDATE users SET ${updates.join(', ')} WHERE id = ?`,
+      values
+    );
+  }
+
+  static async updatePassword(userId, newPassword) {
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await db.execute(
+      'UPDATE users SET password = ? WHERE id = ?',
+      [hashedPassword, userId]
+    );
+  }
 }
 
 module.exports = User;
