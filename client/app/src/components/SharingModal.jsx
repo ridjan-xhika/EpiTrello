@@ -198,7 +198,25 @@ const SharingModal = ({ boardId, onClose }) => {
                       {member.name?.charAt(0).toUpperCase()}
                     </div>
                     <div className="sharing-member-details">
-                      <div className="sharing-member-name">{member.name}</div>
+                      <div className="sharing-member-name">
+                        {member.name}
+                        {member.via_organization && (
+                          <span 
+                            style={{
+                              marginLeft: '8px',
+                              fontSize: '0.75rem',
+                              padding: '2px 6px',
+                              background: 'var(--primary-color)',
+                              color: 'white',
+                              borderRadius: '3px',
+                              fontWeight: '600'
+                            }}
+                            title="Access via organization membership"
+                          >
+                            🏢 Org Member
+                          </span>
+                        )}
+                      </div>
                       <div className="sharing-member-email">{member.email}</div>
                     </div>
                   </div>
@@ -207,6 +225,13 @@ const SharingModal = ({ boardId, onClose }) => {
                     {member.role === 'owner' ? (
                       <span className={`role-badge ${getRoleBadgeClass(member.role)}`}>
                         {getRoleIcon(member.role)} Owner
+                      </span>
+                    ) : member.via_organization ? (
+                      <span 
+                        className={`role-badge ${getRoleBadgeClass(member.role)}`}
+                        title="Access granted via organization membership"
+                      >
+                        {getRoleIcon(member.role)} {member.role} (Org)
                       </span>
                     ) : canManageMembers ? (
                       <>
@@ -247,6 +272,9 @@ const SharingModal = ({ boardId, onClose }) => {
             <li><strong>✏️ Write:</strong> Create and edit cards and lists</li>
             <li><strong>👁️ Read:</strong> View only, cannot make changes</li>
           </ul>
+          <p style={{marginTop: '12px', fontSize: '0.85rem', color: 'var(--text-secondary)'}}>
+            💡 <strong>Note:</strong> All members of the board's organization automatically have access to this board.
+          </p>
         </div>
       </div>
     </div>

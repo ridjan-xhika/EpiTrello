@@ -51,13 +51,15 @@ const OrganizationDetail = () => {
   const handleInvite = async (e) => {
     e.preventDefault();
     try {
-      await api.inviteToOrganization(id, inviteEmail, inviteRole);
+      await api.addMemberToOrganization(id, inviteEmail, inviteRole);
       setShowInviteModal(false);
       setInviteEmail('');
       setInviteRole('member');
-      alert('Invitation sent successfully!');
+      alert('Member added successfully!');
+      // Refresh members list to show the new member
+      fetchOrganizationData();
     } catch (error) {
-      alert(error.message || 'Failed to send invitation');
+      alert(error.message || 'Failed to add member. Make sure the user exists and is not already a member.');
     }
   };
 
@@ -91,6 +93,20 @@ const OrganizationDetail = () => {
       fetchOrganizationData();
     } catch (error) {
       alert('Failed to remove member');
+    }
+  };
+
+  const handleDeleteBoard = async (boardId, e) => {
+    e.stopPropagation(); // Prevent navigation to board
+    if (!window.confirm('Are you sure you want to delete this board? This action cannot be undone.')) {
+      return;
+    }
+    try {
+      await api.deleteBoard(boardId);
+      alert('Board deleted successfully');
+      fetchOrganizationData(); // Refresh the boards list
+    } catch (error) {
+      alert(error.message || 'Failed to delete board. You may not have permission.');
     }
   };
 
@@ -149,6 +165,12 @@ const OrganizationDetail = () => {
           </div>
         </div>
         <div className="organization-header-actions">
+          <button 
+            className="btn btn-secondary"
+            onClick={() => navigate(`/organizations/${id}/audit-log`)}
+          >
+            📋 Audit Log
+          </button>
           {canManage && (
             <>
               <button 
@@ -161,7 +183,7 @@ const OrganizationDetail = () => {
                 className="btn btn-primary"
                 onClick={() => setShowInviteModal(true)}
               >
-                Invite Member
+                + Add Member
               </button>
             </>
           )}
@@ -209,9 +231,38 @@ const OrganizationDetail = () => {
                   key={board.id} 
                   className="board-card"
                   onClick={() => navigate(`/board/${board.id}`)}
+                  style={{position: 'relative'}}
                 >
                   <h3>{board.title}</h3>
                   <p className="board-creator">Created by {board.creator_name}</p>
+                  <button
+                    className="board-delete-btn"
+                    onClick={(e) => handleDeleteBoard(board.id, e)}
+                    title="Delete Board"
+                    style={{
+                      position: 'absolute',
+                      top: '8px',
+                      right: '8px',
+                      background: 'rgba(220, 53, 69, 0.1)',
+                      color: '#dc3545',
+                      border: '1px solid rgba(220, 53, 69, 0.3)',
+                      borderRadius: '4px',
+                      padding: '4px 8px',
+                      cursor: 'pointer',
+                      fontSize: '0.85rem',
+                      transition: 'all 0.2s',
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.background = '#dc3545';
+                      e.currentTarget.style.color = 'white';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.background = 'rgba(220, 53, 69, 0.1)';
+                      e.currentTarget.style.color = '#dc3545';
+                    }}
+                  >
+                    🗑️
+                  </button>
                 </div>
               ))}
               {boards.length === 0 && (
@@ -282,12 +333,12 @@ const OrganizationDetail = () => {
         <div className="modal-overlay" onClick={() => setShowInviteModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>Invite Member</h2>
+              <h2>Add Member</h2>
               <button className="modal-close" onClick={() => setShowInviteModal(false)}>×</button>
             </div>
             <form onSubmit={handleInvite}>
               <div className="form-group">
-                <label>Email</label>
+                <label>User Email</label>
                 <input
                   type="email"
                   value={inviteEmail}
@@ -296,6 +347,9 @@ const OrganizationDetail = () => {
                   required
                   className="form-input"
                 />
+                <small style={{color: 'var(--text-secondary)', marginTop: '4px', display: 'block'}}>
+                  The user must already have an account
+                </small>
               </div>
               <div className="form-group">
                 <label>Role</label>
@@ -309,7 +363,7 @@ const OrganizationDetail = () => {
                 </select>
               </div>
               <div className="form-actions">
-                <button type="submit" className="btn btn-primary">Send Invitation</button>
+                <button type="submit" className="btn btn-primary">Add Member</button>
                 <button type="button" className="btn btn-secondary" onClick={() => setShowInviteModal(false)}>Cancel</button>
               </div>
             </form>

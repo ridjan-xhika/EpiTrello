@@ -2,10 +2,24 @@ const express = require('express');
 const Card = require('../models/Card');
 const Column = require('../models/Column');
 const Board = require('../models/Board');
+const AuditLog = require('../models/AuditLog');
 const auth = require('../middleware/auth');
 const { canWriteBoard } = require('../middleware/permissions');
 
 const router = express.Router();
+
+// Helper to get board organization
+const getBoardOrganization = async (cardId) => {
+  const [rows] = await require('../config/database').execute(
+    `SELECT b.organization_id 
+     FROM cards c 
+     JOIN columns col ON c.column_id = col.id 
+     JOIN boards b ON col.board_id = b.id 
+     WHERE c.id = ?`,
+    [cardId]
+  );
+  return rows[0]?.organization_id;
+};
 
 // Middleware to verify board access
 const verifyBoardAccess = async (req, res, next) => {
@@ -42,6 +56,20 @@ router.post('/', auth, canWriteBoard, verifyBoardAccess, async (req, res) => {
     
     // Log activity
     await Card.logActivity(cardId, req.userId, 'created', { title });
+
+    // Log audit action
+    const orgId = await getBoardOrganization(cardId);
+    if (orgId) {
+      await AuditLog.logAction(
+        orgId,
+        req.userId,
+        'card_created',
+        'card',
+        cardId,
+        { card_title: title },
+        req.ip
+      );
+    }
 
     res.status(201).json({ 
       message: 'Card created successfully',
@@ -82,6 +110,21 @@ router.put('/:id', auth, canWriteBoard, async (req, res) => {
     }
 
     const card = await Card.findById(req.params.id);
+
+    // Log audit action
+    const orgId = await getBoardOrganization(req.params.id);
+    if (orgId) {
+      await AuditLog.logAction(
+        orgId,
+        req.userId,
+        'card_updated',
+        'card',
+        req.params.id,
+        { card_title: card.title, changes: Object.keys(updateData) },
+        req.ip
+      );
+    }
+
     res.json({ 
       message: 'Card updated successfully',
       card 
@@ -95,10 +138,27 @@ router.put('/:id', auth, canWriteBoard, async (req, res) => {
 // Delete card
 router.delete('/:id', auth, canWriteBoard, async (req, res) => {
   try {
+    // Get card info before deleting for audit log
+    const card = await Card.findById(req.params.id);
+    const orgId = await getBoardOrganization(req.params.id);
+
     const success = await Card.delete(req.params.id);
 
     if (!success) {
       return res.status(404).json({ error: 'Card not found' });
+    }
+
+    // Log audit action
+    if (orgId && card) {
+      await AuditLog.logAction(
+        orgId,
+        req.userId,
+        'card_deleted',
+        'card',
+        req.params.id,
+        { card_title: card.title },
+        req.ip
+      );
     }
 
     res.json({ message: 'Card deleted successfully' });

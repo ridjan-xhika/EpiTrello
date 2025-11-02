@@ -4,6 +4,7 @@ const Organization = require('../models/Organization');
 const OrganizationMember = require('../models/OrganizationMember');
 const OrganizationInvitation = require('../models/OrganizationInvitation');
 const User = require('../models/User');
+const AuditLog = require('../models/AuditLog');
 const auth = require('../middleware/auth');
 
 // Create organization
@@ -24,6 +25,17 @@ router.post('/', auth, async (req, res) => {
 
     // Add creator as owner
     await OrganizationMember.addMember(organizationId, req.userId, 'owner');
+
+    // Log audit action
+    await AuditLog.logAction(
+      organizationId,
+      req.userId,
+      'organization_created',
+      'organization',
+      organizationId,
+      { organization_name: display_name },
+      req.ip
+    );
 
     res.status(201).json({ 
       id: organizationId, 
@@ -176,6 +188,59 @@ router.post('/:id/invite', auth, async (req, res) => {
   }
 });
 
+// Add member directly (without invitation)
+router.post('/:id/members', auth, async (req, res) => {
+  try {
+    const organizationId = req.params.id;
+    const { email, role = 'member' } = req.body;
+
+    // Check if user is admin or owner
+    const isAdmin = await OrganizationMember.isAdmin(organizationId, req.userId);
+    if (!isAdmin) {
+      return res.status(403).json({ error: 'Only admins can add members' });
+    }
+
+    // Check if user exists
+    const newMember = await User.findByEmail(email);
+    if (!newMember) {
+      return res.status(404).json({ error: 'User not found with this email' });
+    }
+
+    // Check if already a member
+    const isMember = await OrganizationMember.isMember(organizationId, newMember.id);
+    if (isMember) {
+      return res.status(400).json({ error: 'User is already a member' });
+    }
+
+    // Add member directly
+    await OrganizationMember.addMember(organizationId, newMember.id, role);
+
+    // Log audit action
+    await AuditLog.logAction(
+      organizationId,
+      req.userId,
+      'member_added',
+      'organization_member',
+      newMember.id,
+      { member_name: newMember.name, member_email: email, role },
+      req.ip
+    );
+
+    res.status(201).json({ 
+      message: 'Member added successfully',
+      member: {
+        id: newMember.id,
+        email: newMember.email,
+        name: newMember.name,
+        role
+      }
+    });
+  } catch (error) {
+    console.error('Add member error:', error);
+    res.status(500).json({ error: 'Failed to add member' });
+  }
+});
+
 // Get pending invitations
 router.get('/:id/invitations', auth, async (req, res) => {
   try {
@@ -258,6 +323,23 @@ router.put('/:id/members/:userId', auth, async (req, res) => {
     }
 
     await OrganizationMember.updateRole(organizationId, parseInt(userId), role);
+
+    // Get member info for audit log
+    const member = await User.findById(parseInt(userId));
+    
+    // Log audit action
+    if (member) {
+      await AuditLog.logAction(
+        organizationId,
+        req.userId,
+        'member_role_updated',
+        'organization_member',
+        parseInt(userId),
+        { member_name: member.name, old_role: targetRole, new_role: role },
+        req.ip
+      );
+    }
+
     res.json({ message: 'Member role updated successfully' });
   } catch (error) {
     console.error('Update role error:', error);
@@ -284,7 +366,24 @@ router.delete('/:id/members/:userId', auth, async (req, res) => {
       return res.status(403).json({ error: 'Cannot remove owner' });
     }
 
+    // Get member info for audit log before removal
+    const member = await User.findById(parseInt(userId));
+
     await OrganizationMember.removeMember(organizationId, parseInt(userId));
+
+    // Log audit action
+    if (member) {
+      await AuditLog.logAction(
+        organizationId,
+        req.userId,
+        'member_removed',
+        'organization_member',
+        parseInt(userId),
+        { member_name: member.name, was_self: isSelf },
+        req.ip
+      );
+    }
+
     res.json({ message: 'Member removed successfully' });
   } catch (error) {
     console.error('Remove member error:', error);

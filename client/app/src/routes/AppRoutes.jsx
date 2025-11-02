@@ -9,6 +9,7 @@ import Profile from '../pages/Profile';
 import UserProfile from '../pages/UserProfile';
 import Organizations from '../pages/Organizations';
 import OrganizationDetail from '../pages/OrganizationDetail';
+import AuditLog from '../pages/AuditLog';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import ProtectedRoute from '../components/ProtectedRoute';
@@ -86,6 +87,14 @@ const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <OrganizationDetail />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/organizations/:id/audit-log" 
+          element={
+            <ProtectedRoute>
+              <AuditLog />
             </ProtectedRoute>
           } 
         />

@@ -34,6 +34,10 @@ class AuditLog {
    */
   static async getOrganizationLogs(organizationId, limit = 50, offset = 0) {
     try {
+      // Ensure limit and offset are integers to prevent SQL injection
+      const limitInt = Math.max(1, Math.min(parseInt(limit, 10) || 50, 100));
+      const offsetInt = Math.max(0, parseInt(offset, 10) || 0);
+      
       const [logs] = await pool.execute(
         `SELECT 
           al.id,
@@ -51,15 +55,12 @@ class AuditLog {
         JOIN users u ON al.user_id = u.id
         WHERE al.organization_id = ?
         ORDER BY al.created_at DESC
-        LIMIT ? OFFSET ?`,
-        [organizationId, limit, offset]
+        LIMIT ${limitInt} OFFSET ${offsetInt}`,
+        [parseInt(organizationId, 10)]
       );
       
-      // Parse JSON action_details
-      return logs.map(log => ({
-        ...log,
-        action_details: log.action_details ? JSON.parse(log.action_details) : null
-      }));
+      // Return logs (action_details is already parsed by MySQL)
+      return logs;
     } catch (error) {
       console.error('Error fetching audit logs:', error);
       throw error;
@@ -92,6 +93,10 @@ class AuditLog {
    */
   static async getLogsByActionType(organizationId, actionType, limit = 50, offset = 0) {
     try {
+      // Ensure limit and offset are integers to prevent SQL injection
+      const limitInt = Math.max(1, Math.min(parseInt(limit, 10) || 50, 100));
+      const offsetInt = Math.max(0, parseInt(offset, 10) || 0);
+      
       const [logs] = await pool.execute(
         `SELECT 
           al.id,
@@ -109,14 +114,12 @@ class AuditLog {
         JOIN users u ON al.user_id = u.id
         WHERE al.organization_id = ? AND al.action_type = ?
         ORDER BY al.created_at DESC
-        LIMIT ? OFFSET ?`,
-        [organizationId, actionType, limit, offset]
+        LIMIT ${limitInt} OFFSET ${offsetInt}`,
+        [parseInt(organizationId, 10), actionType]
       );
       
-      return logs.map(log => ({
-        ...log,
-        action_details: log.action_details ? JSON.parse(log.action_details) : null
-      }));
+      // Return logs (action_details is already parsed by MySQL)
+      return logs;
     } catch (error) {
       console.error('Error fetching filtered audit logs:', error);
       throw error;

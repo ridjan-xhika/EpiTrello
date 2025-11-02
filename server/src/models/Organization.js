@@ -58,6 +58,14 @@ class Organization {
     );
     return rows;
   }
+
+  static async isMember(organizationId, userId) {
+    const [rows] = await pool.execute(
+      'SELECT id FROM organization_members WHERE organization_id = ? AND user_id = ?',
+      [organizationId, userId]
+    );
+    return rows.length > 0;
+  }
 }
 
 module.exports = Organization;

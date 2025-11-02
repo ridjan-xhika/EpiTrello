@@ -39,6 +39,21 @@ const BoardPage = () => {
     }
   };
 
+  const handleDeleteBoard = async () => {
+    if (!window.confirm('Are you sure you want to delete this board? This action cannot be undone.')) {
+      return;
+    }
+    
+    try {
+      await api.deleteBoard(id);
+      alert('Board deleted successfully');
+      navigate('/');
+    } catch (err) {
+      console.error('Failed to delete board:', err);
+      alert(err.message || 'Failed to delete board. You may not have permission.');
+    }
+  };
+
   useEffect(() => {
     fetchBoard();
   }, [id]);
@@ -96,6 +111,16 @@ const BoardPage = () => {
           >
             🤝 Share
           </button>
+          {userRole === 'owner' && (
+            <button 
+              onClick={handleDeleteBoard} 
+              className="btn btn-secondary" 
+              style={{background: 'rgba(220, 53, 69, 0.8)', color: 'white', border: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem'}}
+              title="Delete Board"
+            >
+              🗑️ Delete
+            </button>
+          )}
           <button 
             onClick={() => navigate('/')} 
             className="btn btn-secondary" 

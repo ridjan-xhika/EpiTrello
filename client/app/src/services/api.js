@@ -396,6 +396,13 @@ class ApiService {
     });
   }
 
+  async addMemberToOrganization(id, email, role) {
+    return this.request(`/organizations/${id}/members`, {
+      method: 'POST',
+      body: JSON.stringify({ email, role }),
+    });
+  }
+
   async getOrganizationInvitations(id) {
     return this.request(`/organizations/${id}/invitations`);
   }
@@ -421,6 +428,15 @@ class ApiService {
 
   async getOrganizationBoards(id) {
     return this.request(`/organizations/${id}/boards`);
+  }
+
+  // Audit Log methods
+  async getOrganizationAuditLogs(orgId, limit = 50, offset = 0, actionType = null) {
+    let url = `/organizations/${orgId}/audit-logs?limit=${limit}&offset=${offset}`;
+    if (actionType) {
+      url += `&actionType=${actionType}`;
+    }
+    return this.request(url);
   }
 
   logout() {

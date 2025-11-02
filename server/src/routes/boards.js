@@ -58,6 +58,19 @@ router.post('/', auth, async (req, res) => {
     const boardId = await Board.create(title, req.userId, organization_id || null);
     const board = await Board.getWithDetails(boardId, req.userId);
 
+    // Log audit action
+    if (organization_id) {
+      await AuditLog.logAction(
+        organization_id,
+        req.userId,
+        'board_created',
+        'board',
+        boardId,
+        { board_title: title },
+        req.ip
+      );
+    }
+
     res.status(201).json({ 
       message: 'Board created successfully',
       board 
@@ -71,10 +84,26 @@ router.post('/', auth, async (req, res) => {
 // Delete board
 router.delete('/:id', auth, isOwner, async (req, res) => {
   try {
+    // Get board info before deleting for audit log
+    const board = await Board.findById(req.params.id, req.userId);
+    
     const success = await Board.delete(req.params.id, req.userId);
 
     if (!success) {
       return res.status(404).json({ error: 'Board not found or unauthorized' });
+    }
+
+    // Log audit action
+    if (board && board.organization_id) {
+      await AuditLog.logAction(
+        board.organization_id,
+        req.userId,
+        'board_deleted',
+        'board',
+        req.params.id,
+        { board_title: board.title },
+        req.ip
+      );
     }
 
     res.json({ message: 'Board deleted successfully' });

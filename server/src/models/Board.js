@@ -31,13 +31,14 @@ class Board {
 
   static async findByUserId(userId) {
     const [rows] = await db.execute(
-      `SELECT b.*, o.name as organization_name, o.display_name as organization_display_name
+      `SELECT DISTINCT b.*, o.name as organization_name, o.display_name as organization_display_name
        FROM boards b
-       INNER JOIN board_members bm ON b.id = bm.board_id
+       LEFT JOIN board_members bm ON b.id = bm.board_id AND bm.user_id = ?
        LEFT JOIN organizations o ON b.organization_id = o.id
-       WHERE bm.user_id = ?
+       LEFT JOIN organization_members om ON b.organization_id = om.organization_id AND om.user_id = ?
+       WHERE bm.user_id IS NOT NULL OR om.user_id IS NOT NULL
        ORDER BY b.updated_at DESC`,
-      [userId]
+      [userId, userId]
     );
     return rows;
   }
@@ -46,10 +47,11 @@ class Board {
     const [rows] = await db.execute(
       `SELECT b.*, o.name as organization_name, o.display_name as organization_display_name
        FROM boards b
-       INNER JOIN board_members bm ON b.id = bm.board_id
+       LEFT JOIN board_members bm ON b.id = bm.board_id AND bm.user_id = ?
        LEFT JOIN organizations o ON b.organization_id = o.id
-       WHERE b.id = ? AND bm.user_id = ?`,
-      [boardId, userId]
+       LEFT JOIN organization_members om ON b.organization_id = om.organization_id AND om.user_id = ?
+       WHERE b.id = ? AND (bm.user_id IS NOT NULL OR om.user_id IS NOT NULL)`,
+      [userId, userId, boardId]
     );
     return rows[0];
   }
