@@ -79,7 +79,7 @@
 }
 
 .tab.active {
-  color: #0079bf;
+  color: var(--primary-blue);
 }
 
 .tab.active::after {
@@ -230,7 +230,7 @@
 
 .role-select:focus {
   outline: none;
-  border-color: #0079bf;
+  border-color: var(--primary-blue);
 }
 
 .btn-icon {
@@ -391,7 +391,7 @@
 .form-textarea:focus,
 .form-select:focus {
   outline: none;
-  border-color: #0079bf;
+  border-color: var(--primary-blue);
 }
 
 .form-actions {

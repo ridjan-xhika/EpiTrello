@@ -7,6 +7,11 @@
   --primary-blue-hover: #026aa7;
   --primary-blue-dark: #055a8c;
   --primary-gradient: linear-gradient(135deg, #0079bf 0%, #5067c5 100%);
+  --success-gradient: linear-gradient(135deg, #5aac44 0%, #61bd4f 100%);
+  --avatar-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --owner-gradient: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  --admin-gradient: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  --write-gradient: linear-gradient(135deg, #0079bf 0%, #026aa7 100%);
   
   /* Background Colors */
   --bg-primary: #ffffff;
@@ -72,6 +77,11 @@
   --primary-blue-hover: #2684ff;
   --primary-blue-dark: #0065ff;
   --primary-gradient: linear-gradient(135deg, #4c9aff 0%, #6b8dd6 100%);
+  --success-gradient: linear-gradient(135deg, #7ee2b8 0%, #61e9a1 100%);
+  --avatar-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --owner-gradient: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  --admin-gradient: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+  --write-gradient: linear-gradient(135deg, #4c9aff 0%, #2684ff 100%);
   
   /* Background Colors */
   --bg-primary: #1d2125;

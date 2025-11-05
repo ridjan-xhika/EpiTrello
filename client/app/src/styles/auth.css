@@ -254,7 +254,7 @@
 }
 
 .auth-link {
-  color: #0079bf;
+  color: var(--primary-blue);
   text-decoration: none;
   font-size: 14px;
   transition: color 0.1s ease-in;

@@ -65,7 +65,7 @@
 }
 
 .organization-info h3 {
-  color: #172b4d;
+  color: var(--text-primary);
   font-size: 1.1rem;
   margin: 0 0 0.5rem 0;
   white-space: nowrap;
@@ -74,7 +74,7 @@
 }
 
 .organization-description {
-  color: #5e6c84;
+  color: var(--text-secondary);
   font-size: 0.9rem;
   margin: 0 0 1rem 0;
   line-height: 1.4;
@@ -88,7 +88,7 @@
   display: flex;
   gap: 2rem;
   padding-top: 1rem;
-  border-top: 1px solid #e4e6ea;
+  border-top: 1px solid var(--border-primary);
 }
 
 .stat {
@@ -98,13 +98,13 @@
 }
 
 .stat-value {
-  color: #172b4d;
+  color: var(--text-primary);
   font-size: 1.5rem;
   font-weight: 600;
 }
 
 .stat-label {
-  color: #5e6c84;
+  color: var(--text-secondary);
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -123,12 +123,12 @@
 }
 
 .role-gold {
-  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  background: var(--owner-gradient);
   color: #7a5d00;
 }
 
 .role-purple {
-  background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+  background: var(--admin-gradient);
   color: white;
 }
 
@@ -228,7 +228,7 @@
 
 .form-group label {
   display: block;
-  color: #172b4d;
+  color: var(--text-primary);
   font-weight: 600;
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
@@ -239,10 +239,11 @@
 .form-select {
   width: 100%;
   padding: 0.75rem;
-  border: 2px solid #e4e6ea;
+  border: 2px solid var(--border-primary);
   border-radius: 6px;
   font-size: 1rem;
-  color: #172b4d !important;
+  color: var(--input-text) !important;
+  background: var(--input-bg);
   transition: border-color 0.2s;
   font-family: inherit;
 }
@@ -251,13 +252,13 @@
 .form-textarea:focus,
 .form-select:focus {
   outline: none;
-  border-color: #0079bf;
+  border-color: var(--primary-blue);
 }
 
 .form-hint {
   display: block;
   margin-top: 0.5rem;
-  color: #5e6c84;
+  color: var(--text-secondary);
   font-size: 0.85rem;
 }
 
@@ -315,7 +316,7 @@
 .loading {
   text-align: center;
   padding: 4rem 2rem;
-  color: #5e6c84;
+  color: var(--text-secondary);
   font-size: 1.1rem;
 }
 

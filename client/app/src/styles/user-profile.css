@@ -26,7 +26,7 @@
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #5aac44 0%, #61bd4f 100%);
+  background: var(--success-gradient);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -84,13 +84,13 @@
 }
 
 .user-profile-stat-card {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: var(--input-bg);
   padding: 1.5rem;
   border-radius: 12px;
   display: flex;
   align-items: center;
   gap: 1rem;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--border-primary);
   transition: all 0.2s;
 }
 
@@ -124,13 +124,13 @@
 
 .user-profile-actions {
   padding: 1.5rem 2rem;
-  background: #fafbfc;
-  border-top: 2px solid #e5e7eb;
+  background: var(--input-bg);
+  border-top: 2px solid var(--border-primary);
   text-align: center;
 }
 
 .btn-back-secondary {
-  background: linear-gradient(135deg, #0079bf 0%, #026aa7 100%);
+  background: var(--primary-gradient);
   color: white;
   border: none;
   padding: 0.75rem 2rem;

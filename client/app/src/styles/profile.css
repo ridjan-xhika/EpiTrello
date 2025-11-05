@@ -26,7 +26,7 @@
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #5aac44 0%, #61bd4f 100%);
+  background: var(--success-gradient);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -193,7 +193,7 @@
 
 /* Submit Button */
 .profile-submit-btn {
-  background: linear-gradient(135deg, #5aac44 0%, #61bd4f 100%);
+  background: var(--success-gradient);
   color: white;
   border: none;
   padding: 0.875rem 2rem;
