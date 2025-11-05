@@ -2,21 +2,21 @@
 
 .profile-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0079bf 0%, #5067c5 100%);
+  background: var(--primary-gradient);
   padding: 2rem 1rem;
 }
 
 .profile-wrapper {
   max-width: 800px;
   margin: 0 auto;
-  background: white;
+  background: var(--bg-primary);
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
   overflow: hidden;
 }
 
 .profile-header {
-  background: linear-gradient(135deg, #0079bf 0%, #5067c5 100%);
+  background: var(--primary-gradient);
   padding: 3rem 2rem;
   text-align: center;
   color: white;
@@ -53,8 +53,8 @@
 /* Tabs */
 .profile-tabs {
   display: flex;
-  background: #f4f5f7;
-  border-bottom: 1px solid #dfe1e6;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-primary);
 }
 
 .profile-tab {
@@ -64,20 +64,20 @@
   border: none;
   font-size: 1rem;
   font-weight: 500;
-  color: #5e6c84;
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s;
   position: relative;
 }
 
 .profile-tab:hover {
-  background: #e4e6eb;
-  color: #172b4d;
+  background: var(--bg-hover);
+  color: var(--text-primary);
 }
 
 .profile-tab.active {
-  color: #0079bf;
-  background: white;
+  color: var(--primary-blue);
+  background: var(--bg-primary);
 }
 
 .profile-tab.active::after {
@@ -87,7 +87,7 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: #0079bf;
+  background: var(--primary-blue);
 }
 
 /* Content */
@@ -107,15 +107,15 @@
 }
 
 .profile-alert-error {
-  background: #fef2f2;
-  color: #b91c1c;
-  border: 1px solid #fecaca;
+  background: rgba(220, 53, 69, 0.1);
+  color: var(--btn-danger-bg);
+  border: 1px solid rgba(220, 53, 69, 0.3);
 }
 
 .profile-alert-success {
-  background: #f0fdf4;
-  color: #15803d;
-  border: 1px solid #bbf7d0;
+  background: rgba(97, 189, 79, 0.1);
+  color: var(--success);
+  border: 1px solid rgba(97, 189, 79, 0.3);
 }
 
 /* Form */
@@ -134,13 +134,13 @@
 .profile-section h2 {
   margin: 0;
   font-size: 1.5rem;
-  color: #172b4d;
+  color: var(--text-primary);
   font-weight: 600;
 }
 
 .section-description {
   margin: 0;
-  color: #5e6c84;
+  color: var(--text-secondary);
   font-size: 0.95rem;
   line-height: 1.5;
 }
@@ -153,31 +153,31 @@
 
 .form-group label {
   font-weight: 500;
-  color: #172b4d;
+  color: var(--text-primary);
   font-size: 0.95rem;
 }
 
 .form-group input,
 .form-group textarea {
   padding: 0.75rem 1rem;
-  border: 2px solid #dfe1e6;
+  border: 2px solid var(--border-primary);
   border-radius: 6px;
   font-size: 1rem;
   font-family: inherit;
   transition: all 0.2s;
-  background: white;
-  color: #172b4d;
+  background: var(--input-bg);
+  color: var(--input-text);
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: #9ca3af;
+  color: var(--input-placeholder);
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #0079bf;
+  border-color: var(--primary-blue);
   box-shadow: 0 0 0 3px rgba(0, 121, 191, 0.1);
 }
 
@@ -187,7 +187,7 @@
 }
 
 .form-hint {
-  color: #5e6c84;
+  color: var(--text-secondary);
   font-size: 0.85rem;
 }
 
@@ -288,39 +288,39 @@
 /* Dark mode support (optional) */
 @media (prefers-color-scheme: dark) {
   .profile-wrapper {
-    background: #1e1e1e;
+    background: var(--bg-primary);
   }
 
   .profile-section h2 {
-    color: #e4e6eb;
+    color: var(--text-primary);
   }
 
   .form-group label {
-    color: #e4e6eb;
+    color: var(--text-primary);
   }
 
   .form-group input,
   .form-group textarea {
-    background: #2a2a2a;
-    border-color: #3a3a3a;
-    color: #e4e6eb;
+    background: var(--input-bg);
+    border-color: var(--border-primary);
+    color: var(--input-text);
   }
 
   .profile-tabs {
-    background: #2a2a2a;
-    border-bottom-color: #3a3a3a;
+    background: var(--bg-secondary);
+    border-bottom-color: var(--border-primary);
   }
 
   .profile-tab {
-    color: #9ca3af;
+    color: var(--text-secondary);
   }
 
   .profile-tab:hover {
-    background: #333;
-    color: #e4e6eb;
+    background: var(--bg-hover);
+    color: var(--text-primary);
   }
 
   .profile-tab.active {
-    background: #1e1e1e;
+    background: var(--bg-primary);
   }
 }

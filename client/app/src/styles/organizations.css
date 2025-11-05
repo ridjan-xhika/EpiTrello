@@ -12,7 +12,7 @@
 }
 
 .organizations-header h1 {
-  color: #172b4d;
+  color: var(--text-primary);
   font-size: 2rem;
   margin: 0;
 }
@@ -24,12 +24,13 @@
 }
 
 .organization-card {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 8px;
   padding: 1.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: all 0.2s;
   cursor: pointer;
+  border: 1px solid var(--border-primary);
 }
 
 .organization-card:hover {
@@ -48,7 +49,7 @@
   width: 50px;
   height: 50px;
   border-radius: 8px;
-  background: linear-gradient(135deg, #0079bf 0%, #5067c5 100%);
+  background: var(--primary-gradient);
   color: white;
   display: flex;
   align-items: center;
@@ -132,7 +133,7 @@
 }
 
 .role-blue {
-  background: linear-gradient(135deg, #0079bf 0%, #5067c5 100%);
+  background: var(--primary-gradient);
   color: white;
 }
 
@@ -140,18 +141,19 @@
   grid-column: 1 / -1;
   text-align: center;
   padding: 4rem 2rem;
-  background: white;
+  background: var(--bg-primary);
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-primary);
 }
 
 .empty-state h2 {
-  color: #172b4d;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
 
 .empty-state p {
-  color: #5e6c84;
+  color: var(--text-secondary);
   margin-bottom: 2rem;
 }
 
@@ -171,7 +173,7 @@
 }
 
 .modal-content {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 12px;
   max-width: 500px;
   width: 100%;
@@ -181,7 +183,7 @@
 }
 
 .modal-header {
-  background: linear-gradient(135deg, #0079bf 0%, #5067c5 100%);
+  background: var(--primary-gradient);
   color: white;
   padding: 1.5rem;
   border-radius: 12px 12px 0 0;
@@ -281,7 +283,7 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #0079bf 0%, #5067c5 100%);
+  background: var(--primary-gradient);
   color: white;
 }
 
@@ -291,21 +293,21 @@
 }
 
 .btn-secondary {
-  background: #e4e6ea;
-  color: #172b4d;
+  background: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
 }
 
 .btn-secondary:hover {
-  background: #d4d6da;
+  background: var(--btn-secondary-hover);
 }
 
 .btn-danger {
-  background: #eb5a46;
+  background: var(--btn-danger-bg);
   color: white;
 }
 
 .btn-danger:hover {
-  background: #d94436;
+  background: var(--btn-danger-hover);
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(235, 90, 70, 0.3);
 }

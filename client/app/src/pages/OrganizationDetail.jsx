@@ -244,7 +244,7 @@ const OrganizationDetail = () => {
                       top: '8px',
                       right: '8px',
                       background: 'rgba(220, 53, 69, 0.1)',
-                      color: '#dc3545',
+                      color: 'var(--btn-danger-bg)',
                       border: '1px solid rgba(220, 53, 69, 0.3)',
                       borderRadius: '4px',
                       padding: '4px 8px',
@@ -253,12 +253,12 @@ const OrganizationDetail = () => {
                       transition: 'all 0.2s',
                     }}
                     onMouseOver={(e) => {
-                      e.currentTarget.style.background = '#dc3545';
+                      e.currentTarget.style.background = 'var(--btn-danger-bg)';
                       e.currentTarget.style.color = 'white';
                     }}
                     onMouseOut={(e) => {
                       e.currentTarget.style.background = 'rgba(220, 53, 69, 0.1)';
-                      e.currentTarget.style.color = '#dc3545';
+                      e.currentTarget.style.color = 'var(--btn-danger-bg)';
                     }}
                   >
                     🗑️

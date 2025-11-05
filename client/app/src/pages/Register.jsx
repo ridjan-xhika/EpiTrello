@@ -45,9 +45,9 @@ const Register = () => {
       <div className="auth-card">
         <div className="auth-header">
           <svg className="trello-logo" width="150" height="32" viewBox="0 0 150 32" fill="none">
-            <rect x="0" y="0" width="10" height="32" rx="2" fill="#0079bf"/>
-            <rect x="14" y="0" width="10" height="24" rx="2" fill="#0079bf"/>
-            <text x="32" y="24" fontFamily="Arial, sans-serif" fontSize="24" fontWeight="bold" fill="#172b4d">EpiTrelloo</text>
+            <rect x="0" y="0" width="10" height="32" rx="2" fill="var(--primary-blue)"/>
+            <rect x="14" y="0" width="10" height="24" rx="2" fill="var(--primary-blue)"/>
+            <text x="32" y="24" fontFamily="Arial, sans-serif" fontSize="24" fontWeight="bold" fill="var(--text-primary)">EpiTrelloo</text>
           </svg>
           <h2>Sign up for your account</h2>
         </div>

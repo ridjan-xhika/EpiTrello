@@ -5,7 +5,10 @@ const ThemeContext = createContext();
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
-    return savedTheme || 'light';
+    const initialTheme = savedTheme || 'light';
+    // Set theme immediately on mount
+    document.documentElement.setAttribute('data-theme', initialTheme);
+    return initialTheme;
   });
 
   useEffect(() => {

@@ -86,7 +86,7 @@ const Settings = () => {
 
       <div className="settings-section">
         <h2>ℹ️ About EpiTrelloo</h2>
-        <p style={{color: '#5e6c84', fontSize: '0.875rem', lineHeight: '1.6'}}>
+        <p style={{color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: '1.6'}}>
           A Trello-inspired project management tool built with React, Express, and MySQL. 
           Organize your work with boards, lists, and cards.
         </p>

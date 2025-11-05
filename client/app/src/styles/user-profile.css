@@ -2,21 +2,21 @@
 
 .user-profile-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0079bf 0%, #5067c5 100%);
+  background: var(--primary-gradient);
   padding: 2rem 1rem;
 }
 
 .user-profile-wrapper {
   max-width: 700px;
   margin: 0 auto;
-  background: white;
+  background: var(--bg-primary);
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
   overflow: hidden;
 }
 
 .user-profile-header {
-  background: linear-gradient(135deg, #0079bf 0%, #5067c5 100%);
+  background: var(--primary-gradient);
   padding: 3rem 2rem;
   text-align: center;
   color: white;
@@ -61,18 +61,18 @@
 .user-profile-section h2 {
   margin: 0 0 1rem;
   font-size: 1.3rem;
-  color: #172b4d;
+  color: var(--text-primary);
   font-weight: 600;
 }
 
 .user-profile-bio {
   margin: 0;
-  color: #5e6c84;
+  color: var(--text-secondary);
   font-size: 1rem;
   line-height: 1.6;
   padding: 1rem;
-  background: #fafbfc;
-  border-left: 4px solid #0079bf;
+  background: var(--input-bg);
+  border-left: 4px solid var(--primary-blue);
   border-radius: 4px;
 }
 
@@ -109,7 +109,7 @@
 
 .stat-label {
   font-size: 0.85rem;
-  color: #5e6c84;
+  color: var(--text-secondary);
   margin-bottom: 0.25rem;
   font-weight: 500;
   text-transform: uppercase;
@@ -119,7 +119,7 @@
 .stat-value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #172b4d;
+  color: var(--text-primary);
 }
 
 .user-profile-actions {
@@ -173,7 +173,7 @@
 
 .btn-back {
   background: white;
-  color: #0079bf;
+  color: var(--primary-blue);
   border: none;
   padding: 0.875rem 2rem;
   border-radius: 6px;

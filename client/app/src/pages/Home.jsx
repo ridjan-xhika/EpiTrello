@@ -94,8 +94,8 @@ const Home = () => {
           onClick={() => setIsModalOpen(true)}
           className="board-card board-card-create"
           style={{
-            background: 'rgba(9, 30, 66, 0.08)',
-            color: '#172b4d',
+            background: 'var(--btn-secondary-bg)',
+            color: 'var(--text-primary)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
