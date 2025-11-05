@@ -113,37 +113,39 @@
 .sharing-email-input {
   flex: 1;
   padding: 0.75rem 1rem;
-  border: 2px solid #dfe1e6;
+  border: 2px solid var(--border-primary);
   border-radius: 6px;
   font-size: 0.95rem;
   transition: border-color 0.2s;
-  color: #172b4d;
-  background: white;
+  color: var(--input-text);
+  background: var(--bg-primary);
 }
 
 .sharing-email-input::placeholder {
-  color: #9ca3af;
+  color: var(--input-placeholder);
 }
 
 .sharing-email-input:focus {
   outline: none;
-  border-color: #0079bf;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 1px var(--primary-blue);
 }
 
 .sharing-role-select {
   padding: 0.75rem 1rem;
-  border: 2px solid #dfe1e6;
+  border: 2px solid var(--border-primary);
   border-radius: 6px;
   font-size: 0.95rem;
-  background: white;
+  background: var(--bg-primary);
   cursor: pointer;
   min-width: 140px;
-  color: #172b4d;
+  color: var(--input-text);
 }
 
 .sharing-role-select:focus {
   outline: none;
-  border-color: #0079bf;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 1px var(--primary-blue);
 }
 
 .sharing-invite-btn {
@@ -171,7 +173,7 @@
 .sharing-hint {
   margin: 0;
   font-size: 0.85rem;
-  color: #5e6c84;
+  color: var(--text-secondary);
 }
 
 /* Members Section */
