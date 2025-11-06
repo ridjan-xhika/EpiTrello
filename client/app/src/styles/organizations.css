@@ -125,17 +125,27 @@
 .stat-number {
   font-size: 1.75rem;
   font-weight: 700;
+  color: #172b4d;
   color: var(--text-primary);
   line-height: 1.2;
 }
 
+[data-theme="dark"] .stat-number {
+  color: #b6c2cf;
+}
+
 .stat-label {
   font-size: 0.875rem;
+  color: #5e6c84;
   color: var(--text-secondary);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-top: 4px;
+}
+
+[data-theme="dark"] .stat-label {
+  color: #9fadbc;
 }
 
 /* ============================================================================
