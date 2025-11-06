@@ -4,60 +4,60 @@
 .view-switcher {
   display: inline-flex;
   gap: 2px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(8px);
   padding: 3px;
   border-radius: 6px;
-  margin-bottom: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .view-btn {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
+  gap: 5px;
+  padding: 6px 10px;
   background: transparent;
   border: none;
   border-radius: 4px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.75);
   cursor: pointer;
   transition: all 0.12s ease;
   text-decoration: none;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
   position: relative;
+  white-space: nowrap;
 }
 
 .view-btn:hover {
   background: rgba(255, 255, 255, 0.15);
   color: rgba(255, 255, 255, 0.95);
   text-decoration: none;
-  transform: translateY(-1px);
 }
 
 .view-btn.active {
   background: rgba(255, 255, 255, 0.95);
-  color: var(--primary-blue);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #026aa7;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  font-weight: 700;
 }
 
 .view-btn.active:hover {
   background: white;
-  transform: translateY(0);
+  color: #0079bf;
 }
 
 .view-icon {
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1;
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
 }
 
 .view-name {
   font-weight: 600;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 @media (max-width: 768px) {
@@ -66,7 +66,12 @@
   }
   
   .view-btn {
-    padding: 8px;
+    padding: 6px 8px;
+    gap: 0;
+  }
+  
+  .view-icon {
+    font-size: 16px;
   }
 }
 

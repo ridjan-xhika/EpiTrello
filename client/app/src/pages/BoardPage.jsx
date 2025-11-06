@@ -135,6 +135,9 @@ const BoardPage = () => {
               👁️ Read Only
             </span>
           )}
+          <div style={{marginLeft: '1rem'}}>
+            <BoardViewSwitcher currentView={currentView} onViewChange={setCurrentView} />
+          </div>
         </div>
         <div style={{display: 'flex', gap: '0.5rem'}}>
           <button 
@@ -165,7 +168,6 @@ const BoardPage = () => {
       </div>
 
       <div className="board-page-content">
-        <BoardViewSwitcher currentView={currentView} onViewChange={setCurrentView} />
         {renderView()}
       </div>
       
