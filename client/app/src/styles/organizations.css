@@ -307,28 +307,37 @@
 .btn-primary {
   background: var(--btn-primary-bg);
   color: var(--btn-primary-text);
+  text-decoration: none;
 }
 
 .btn-primary:hover {
   background: var(--btn-primary-hover);
+  color: var(--btn-primary-text);
+  text-decoration: none;
 }
 
 .btn-secondary {
   background: var(--btn-secondary-bg);
   color: var(--btn-secondary-text);
+  text-decoration: none;
 }
 
 .btn-secondary:hover {
   background: var(--btn-secondary-hover);
+  color: var(--btn-secondary-text);
+  text-decoration: none;
 }
 
 .btn-danger {
   background: var(--btn-danger-bg);
   color: white;
+  text-decoration: none;
 }
 
 .btn-danger:hover {
   background: var(--btn-danger-hover);
+  color: white;
+  text-decoration: none;
 }
 
 .loading {
