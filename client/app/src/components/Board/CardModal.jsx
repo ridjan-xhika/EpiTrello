@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import ReactMarkdown from 'react-markdown';
 import api from '../../services/api';
 import '../../styles/card.css';
 
@@ -398,7 +399,7 @@ function CardModal({ card, columnTitle, onClose, onUpdate, canWrite }) {
                     className="card-description-textarea"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Add a more detailed description..."
+                    placeholder="Add a more detailed description... (Markdown supported: **bold**, *italic*, # headings, - lists, etc.)"
                   />
                   <div className="card-description-actions">
                     <button className="btn-primary" onClick={handleUpdateDescription}>Save</button>
@@ -413,7 +414,15 @@ function CardModal({ card, columnTitle, onClose, onUpdate, canWrite }) {
                   className={`card-description-display ${!description ? 'empty' : ''}`}
                   onClick={() => canWrite && setEditingDescription(true)}
                 >
-                  {description || 'Add a more detailed description...'}
+                  {description ? (
+                    <div className="markdown-content">
+                      <ReactMarkdown>
+                        {description}
+                      </ReactMarkdown>
+                    </div>
+                  ) : (
+                    'Add a more detailed description...'
+                  )}
                 </div>
               )}
             </div>

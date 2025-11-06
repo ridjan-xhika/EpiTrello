@@ -39,36 +39,55 @@ class BoardMember {
   }
 
   static async getBoardMembers(boardId) {
-    const [rows] = await db.execute(
-      `SELECT DISTINCT
-         COALESCE(bm.user_id, om.user_id) as user_id,
+    // Get direct board members
+    const [directMembers] = await db.execute(
+      `SELECT 
+         u.id as user_id,
          u.name, 
          u.username, 
          u.email,
-         COALESCE(bm.role,
-           CASE 
-             WHEN om.role IN ('admin', 'owner') THEN 'admin'
-             ELSE 'write'
-           END
-         ) as role,
-         CASE WHEN bm.user_id IS NOT NULL THEN bm.created_at ELSE om.created_at END as created_at,
-         CASE WHEN om.user_id IS NOT NULL THEN true ELSE false END as via_organization
-       FROM boards b
-       LEFT JOIN board_members bm ON b.id = bm.board_id
-       LEFT JOIN organization_members om ON b.organization_id = om.organization_id AND b.organization_id IS NOT NULL
-       JOIN users u ON u.id = COALESCE(bm.user_id, om.user_id)
-       WHERE b.id = ? AND (bm.user_id IS NOT NULL OR om.user_id IS NOT NULL)
-       ORDER BY 
-         CASE COALESCE(bm.role, CASE WHEN om.role IN ('admin', 'owner') THEN 'admin' ELSE 'write' END)
-           WHEN 'owner' THEN 1 
-           WHEN 'admin' THEN 2 
-           WHEN 'write' THEN 3 
-           WHEN 'read' THEN 4 
-         END,
-         created_at`,
+         bm.role,
+         bm.created_at,
+         false as via_organization
+       FROM board_members bm
+       JOIN users u ON u.id = bm.user_id
+       WHERE bm.board_id = ?`,
       [boardId]
     );
-    return rows;
+
+    // Get organization members (if board belongs to an organization)
+    const [orgMembers] = await db.execute(
+      `SELECT 
+         u.id as user_id,
+         u.name, 
+         u.username, 
+         u.email,
+         CASE 
+           WHEN om.role IN ('admin', 'owner') THEN 'admin'
+           ELSE 'write'
+         END as role,
+         om.created_at,
+         true as via_organization
+       FROM boards b
+       JOIN organization_members om ON b.organization_id = om.organization_id
+       JOIN users u ON u.id = om.user_id
+       WHERE b.id = ? AND b.organization_id IS NOT NULL
+         AND om.user_id NOT IN (
+           SELECT user_id FROM board_members WHERE board_id = ?
+         )`,
+      [boardId, boardId]
+    );
+
+    // Combine and sort members
+    const allMembers = [...directMembers, ...orgMembers];
+    allMembers.sort((a, b) => {
+      const roleOrder = { owner: 1, admin: 2, write: 3, read: 4 };
+      const roleComparison = (roleOrder[a.role] || 5) - (roleOrder[b.role] || 5);
+      if (roleComparison !== 0) return roleComparison;
+      return new Date(a.created_at) - new Date(b.created_at);
+    });
+
+    return allMembers;
   }
 
   static async updateMemberRole(boardId, userId, role) {

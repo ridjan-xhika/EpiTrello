@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 import api from '../services/api';
 import '../styles/user-profile.css';
 
@@ -73,9 +74,15 @@ const UserProfile = () => {
         <div className="user-profile-content">
           <div className="user-profile-section">
             <h2>📝 Bio</h2>
-            <p className="user-profile-bio">
-              {user.bio || 'This user hasn\'t added a bio yet.'}
-            </p>
+            {user.bio ? (
+              <div className="user-profile-bio markdown-content">
+                <ReactMarkdown>{user.bio}</ReactMarkdown>
+              </div>
+            ) : (
+              <p className="user-profile-bio" style={{ fontStyle: 'italic', color: 'var(--text-secondary)' }}>
+                This user hasn't added a bio yet.
+              </p>
+            )}
           </div>
 
           <div className="user-profile-stats">

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import '../styles/profile.css';
@@ -8,6 +9,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState('profile');
+  const [editingBio, setEditingBio] = useState(false);
   
   // Profile form
   const [profile, setProfile] = useState({
@@ -217,17 +219,69 @@ const Profile = () => {
 
                 <div className="form-group">
                   <label htmlFor="bio">Bio</label>
-                  <textarea
-                    id="bio"
-                    name="bio"
-                    value={profile.bio}
-                    onChange={handleProfileChange}
-                    placeholder="Tell us about yourself..."
-                    rows="4"
-                  />
-                  <small className="form-hint">
-                    {profile.bio.length}/500 characters
-                  </small>
+                  {editingBio ? (
+                    <>
+                      <textarea
+                        id="bio"
+                        name="bio"
+                        value={profile.bio}
+                        onChange={handleProfileChange}
+                        placeholder="Tell us about yourself... (Markdown supported: **bold**, *italic*, # headings, - lists, etc.)"
+                        rows="6"
+                        maxLength="500"
+                      />
+                      <small className="form-hint">
+                        {profile.bio.length}/500 characters • Markdown supported
+                      </small>
+                      <div style={{ marginTop: '8px', display: 'flex', gap: '8px' }}>
+                        <button
+                          type="button"
+                          className="btn-secondary"
+                          onClick={() => setEditingBio(false)}
+                          style={{ fontSize: '14px', padding: '6px 12px' }}
+                        >
+                          Preview
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div
+                        className="bio-preview"
+                        onClick={() => setEditingBio(true)}
+                        style={{
+                          minHeight: '80px',
+                          padding: '12px',
+                          border: '2px solid var(--border-primary)',
+                          borderRadius: '6px',
+                          cursor: 'pointer',
+                          background: 'var(--bg-primary)',
+                          transition: 'all 0.2s'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.borderColor = 'var(--primary-blue)';
+                          e.currentTarget.style.background = 'var(--bg-hover)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.borderColor = 'var(--border-primary)';
+                          e.currentTarget.style.background = 'var(--bg-primary)';
+                        }}
+                      >
+                        {profile.bio ? (
+                          <div className="markdown-content">
+                            <ReactMarkdown>{profile.bio}</ReactMarkdown>
+                          </div>
+                        ) : (
+                          <span style={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>
+                            Click to add a bio...
+                          </span>
+                        )}
+                      </div>
+                      <small className="form-hint">
+                        Click to edit • Markdown supported
+                      </small>
+                    </>
+                  )}
                 </div>
               </div>
 

@@ -108,15 +108,18 @@
   display: flex;
   gap: 0.75rem;
   margin-bottom: 0.5rem;
+  align-items: center;
 }
 
 .sharing-email-input {
-  flex: 1;
-  padding: 0.75rem 1rem;
+  /* Give the email input more space so it doesn't get squeezed by the select/button */
+  flex: 1 1 60%;
+  min-width: 220px;
+  padding: 0.9rem 1.1rem;
   border: 2px solid var(--border-primary);
-  border-radius: 6px;
-  font-size: 0.95rem;
-  transition: border-color 0.2s;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
   color: var(--input-text);
   background: var(--bg-primary);
 }
@@ -132,13 +135,14 @@
 }
 
 .sharing-role-select {
-  padding: 0.75rem 1rem;
+  padding: 0.7rem 0.9rem;
   border: 2px solid var(--border-primary);
   border-radius: 6px;
   font-size: 0.95rem;
   background: var(--bg-primary);
   cursor: pointer;
-  min-width: 140px;
+  flex: 0 0 150px;
+  min-width: 120px;
   color: var(--input-text);
 }
 
@@ -149,7 +153,7 @@
 }
 
 .sharing-invite-btn {
-  padding: 0.75rem 1.5rem;
+  padding: 0.7rem 1.2rem;
   background: var(--success-gradient);
   color: white;
   border: none;
@@ -158,6 +162,7 @@
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;
+  flex: 0 0 auto;
 }
 
 .sharing-invite-btn:hover:not(:disabled) {
