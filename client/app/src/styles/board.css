@@ -34,6 +34,14 @@
   position: relative;
 }
 
+.board-page-content {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+  position: relative;
+  z-index: 1;
+}
+
 .board-container {
   flex: 1;
   overflow-x: auto;

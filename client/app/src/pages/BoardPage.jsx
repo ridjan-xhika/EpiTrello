@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Board from '../components/Board/Board';
+import ListView from '../components/Board/ListView';
+import CalendarView from '../components/Board/CalendarView';
+import TableView from '../components/Board/TableView';
+import BoardViewSwitcher from '../components/Board/BoardViewSwitcher';
 import SharingModal from '../components/SharingModal';
+import CardModal from '../components/Board/CardModal';
 import api from '../services/api';
 
 const BoardPage = () => {
@@ -12,6 +17,9 @@ const BoardPage = () => {
   const [error, setError] = useState(null);
   const [showSharingModal, setShowSharingModal] = useState(false);
   const [userRole, setUserRole] = useState(null);
+  const [currentView, setCurrentView] = useState('board');
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [showCardModal, setShowCardModal] = useState(false);
 
   const fetchBoard = async () => {
     try {
@@ -51,6 +59,31 @@ const BoardPage = () => {
     } catch (err) {
       console.error('Failed to delete board:', err);
       alert(err.message || 'Failed to delete board. You may not have permission.');
+    }
+  };
+
+  const handleCardClick = (card) => {
+    setSelectedCard(card);
+    setShowCardModal(true);
+  };
+
+  const handleCloseCardModal = () => {
+    setShowCardModal(false);
+    setSelectedCard(null);
+    fetchBoard(); // Refresh board data after closing modal
+  };
+
+  const renderView = () => {
+    switch (currentView) {
+      case 'list':
+        return <ListView board={board} onCardClick={handleCardClick} userRole={userRole} />;
+      case 'calendar':
+        return <CalendarView board={board} onCardClick={handleCardClick} />;
+      case 'table':
+        return <TableView board={board} onCardClick={handleCardClick} userRole={userRole} />;
+      case 'board':
+      default:
+        return <Board board={board} onUpdate={fetchBoard} userRole={userRole} />;
     }
   };
 
@@ -130,12 +163,25 @@ const BoardPage = () => {
           </button>
         </div>
       </div>
-      <Board board={board} onUpdate={fetchBoard} userRole={userRole} />
+
+      <div className="board-page-content">
+        <BoardViewSwitcher currentView={currentView} onViewChange={setCurrentView} />
+        {renderView()}
+      </div>
       
       {showSharingModal && (
         <SharingModal 
           boardId={id} 
           onClose={() => setShowSharingModal(false)} 
+        />
+      )}
+
+      {showCardModal && selectedCard && (
+        <CardModal
+          card={selectedCard}
+          columnId={selectedCard.columnId}
+          onClose={handleCloseCardModal}
+          userRole={userRole}
         />
       )}
     </div>
