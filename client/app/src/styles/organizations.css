@@ -34,7 +34,7 @@
   border-radius: 3px;
   padding: 16px;
   box-shadow: var(--shadow-card);
-  transition: all 0.15s;
+  transition: all 0.12s ease;
   cursor: pointer;
   border: 1px solid var(--border-primary);
 }
@@ -42,6 +42,7 @@
 .organization-card:hover {
   box-shadow: var(--shadow-md);
   background: var(--bg-primary);
+  transform: translateY(-2px);
 }
 
 .organization-card-header {
@@ -88,6 +89,7 @@
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

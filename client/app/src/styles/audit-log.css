@@ -28,12 +28,15 @@
   color: var(--text-primary);
   cursor: pointer;
   transition: all 0.2s ease;
+  text-decoration: none;
 }
 
 .back-button:hover {
   background: var(--bg-hover);
   border-color: var(--primary-blue);
   transform: translateX(-2px);
+  color: var(--text-primary);
+  text-decoration: none;
 }
 
 .audit-log-header h1 {

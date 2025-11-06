@@ -147,6 +147,8 @@
 .btn-back-secondary:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  color: var(--text-primary);
+  text-decoration: none;
 }
 
 /* Loading and Error States */
@@ -184,11 +186,14 @@
   cursor: pointer;
   transition: all 0.2s;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
 }
 
 .btn-back:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  color: var(--primary-blue);
+  text-decoration: none;
 }
 
 /* Responsive */
