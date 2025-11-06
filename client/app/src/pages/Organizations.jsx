@@ -43,14 +43,14 @@ const Organizations = () => {
 
   const getRoleBadge = (role) => {
     const badges = {
-      owner: { icon: '👑', color: 'gold', text: 'Owner' },
-      admin: { icon: '⭐', color: 'purple', text: 'Admin' },
-      member: { icon: '👤', color: 'blue', text: 'Member' }
+      owner: { color: 'gold', text: 'Owner' },
+      admin: { color: 'purple', text: 'Admin' },
+      member: { color: 'blue', text: 'Member' }
     };
     const badge = badges[role] || badges.member;
     return (
       <span className={`role-badge role-${badge.color}`}>
-        {badge.icon} {badge.text}
+        {badge.text}
       </span>
     );
   };
@@ -61,60 +61,152 @@ const Organizations = () => {
 
   return (
     <div className="organizations-page">
-      <div className="organizations-header">
-        <h1>Organizations</h1>
-        <button 
-          className="btn btn-primary"
-          onClick={() => setShowCreateModal(true)}
-        >
-          + Create Organization
-        </button>
+      {/* Hero Section */}
+      <div className="organizations-hero">
+        <div className="organizations-hero-content">
+          <h1 className="organizations-hero-title">Your Organizations</h1>
+          <p className="organizations-hero-subtitle">
+            Manage your teams, collaborate on projects, and organize your work
+          </p>
+        </div>
       </div>
 
-      <div className="organizations-grid">
-        {organizations.length === 0 ? (
-          <div className="empty-state">
-            <h2>No organizations yet</h2>
-            <p>Create your first organization to collaborate with your team</p>
-            <button 
-              className="btn btn-primary"
-              onClick={() => setShowCreateModal(true)}
-            >
-              Create Organization
-            </button>
-          </div>
-        ) : (
-          organizations.map((org) => (
-            <div 
-              key={org.id} 
-              className="organization-card"
-              onClick={() => navigate(`/organizations/${org.id}`)}
-            >
-              <div className="organization-card-header">
-                <div className="organization-icon">
-                  {org.display_name.charAt(0).toUpperCase()}
-                </div>
-                <div className="organization-info">
-                  <h3>{org.display_name}</h3>
-                  {getRoleBadge(org.role)}
-                </div>
+      {/* Main Content */}
+      <div className="organizations-content">
+        {/* Stats Overview */}
+        {organizations.length > 0 && (
+          <div className="organizations-stats">
+            <div className="stat-card">
+              <div className="stat-icon">
+                <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M1.75 1A1.75 1.75 0 0 0 0 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0 0 16 13.25v-10.5A1.75 1.75 0 0 0 14.25 1H1.75zM1.5 2.75a.25.25 0 0 1 .25-.25h12.5a.25.25 0 0 1 .25.25v10.5a.25.25 0 0 1-.25.25H1.75a.25.25 0 0 1-.25-.25V2.75z"></path>
+                  <path d="M4.75 4a.75.75 0 0 0 0 1.5h6.5a.75.75 0 0 0 0-1.5h-6.5zM4 7.75A.75.75 0 0 1 4.75 7h6.5a.75.75 0 0 1 0 1.5h-6.5A.75.75 0 0 1 4 7.75zm.75 2.75a.75.75 0 0 0 0 1.5h4.5a.75.75 0 0 0 0-1.5h-4.5z"></path>
+                </svg>
               </div>
-              {org.description && (
-                <p className="organization-description">{org.description}</p>
-              )}
-              <div className="organization-stats">
-                <div className="stat">
-                  <span className="stat-value">{org.member_count || 0}</span>
-                  <span className="stat-label">Members</span>
-                </div>
-                <div className="stat">
-                  <span className="stat-value">{org.board_count || 0}</span>
-                  <span className="stat-label">Boards</span>
-                </div>
+              <div className="stat-info">
+                <div className="stat-number">{organizations.length}</div>
+                <div className="stat-label">Total Organizations</div>
               </div>
             </div>
-          ))
+            <div className="stat-card">
+              <div className="stat-icon">
+                <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M5.5 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.508 5.508 0 0 1 3.034 4.084.75.75 0 1 1-1.482.235 4 4 0 0 0-7.9 0 .75.75 0 0 1-1.482-.236A5.507 5.507 0 0 1 3.102 8.05 3.493 3.493 0 0 1 2 5.5ZM11 4a3.001 3.001 0 0 1 2.22 5.018 5.01 5.01 0 0 1 2.56 3.012.749.749 0 0 1-.885.954.752.752 0 0 1-.549-.514 3.507 3.507 0 0 0-2.522-2.372.75.75 0 0 1-.574-.73v-.352a.75.75 0 0 1 .416-.672A1.5 1.5 0 0 0 11 5.5.75.75 0 0 1 11 4Z"></path>
+                </svg>
+              </div>
+              <div className="stat-info">
+                <div className="stat-number">
+                  {organizations.reduce((sum, org) => sum + (org.member_count || 0), 0)}
+                </div>
+                <div className="stat-label">Total Members</div>
+              </div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-icon">
+                <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25V1.75zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25H1.75z"></path>
+                  <path d="M3.75 3a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5A.75.75 0 0 1 3.75 3zm4 0a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5A.75.75 0 0 1 7.75 3zm4 0a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5a.75.75 0 0 1 .75-.75z"></path>
+                </svg>
+              </div>
+              <div className="stat-info">
+                <div className="stat-number">
+                  {organizations.reduce((sum, org) => sum + (org.board_count || 0), 0)}
+                </div>
+                <div className="stat-label">Total Boards</div>
+              </div>
+            </div>
+          </div>
         )}
+
+        {/* Section Header */}
+        <div className="organizations-section">
+          <div className="section-header">
+            <div>
+              <h2 className="section-title">
+                <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M1.75 1A1.75 1.75 0 0 0 0 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0 0 16 13.25v-10.5A1.75 1.75 0 0 0 14.25 1H1.75zM1.5 2.75a.25.25 0 0 1 .25-.25h12.5a.25.25 0 0 1 .25.25v10.5a.25.25 0 0 1-.25.25H1.75a.25.25 0 0 1-.25-.25V2.75z"></path>
+                  <path d="M4.75 4a.75.75 0 0 0 0 1.5h6.5a.75.75 0 0 0 0-1.5h-6.5zM4 7.75A.75.75 0 0 1 4.75 7h6.5a.75.75 0 0 1 0 1.5h-6.5A.75.75 0 0 1 4 7.75zm.75 2.75a.75.75 0 0 0 0 1.5h4.5a.75.75 0 0 0 0-1.5h-4.5z"></path>
+                </svg>
+                All Organizations
+              </h2>
+              <p className="section-subtitle">{organizations.length} organization{organizations.length !== 1 ? 's' : ''}</p>
+            </div>
+            <div className="section-actions">
+              <button 
+                className="btn btn-primary"
+                onClick={() => setShowCreateModal(true)}
+              >
+                + Create Organization
+              </button>
+            </div>
+          </div>
+
+          {/* Organizations Grid */}
+          <div className="organizations-grid">
+            {organizations.length === 0 ? (
+              <div className="empty-state">
+                <div className="empty-state-icon">
+                  <svg width="80" height="80" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M1.75 1A1.75 1.75 0 0 0 0 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0 0 16 13.25v-10.5A1.75 1.75 0 0 0 14.25 1H1.75zM1.5 2.75a.25.25 0 0 1 .25-.25h12.5a.25.25 0 0 1 .25.25v10.5a.25.25 0 0 1-.25.25H1.75a.25.25 0 0 1-.25-.25V2.75z"></path>
+                  </svg>
+                </div>
+                <h2 className="empty-state-title">No organizations yet</h2>
+                <p className="empty-state-text">
+                  Create your first organization to collaborate with your team and manage projects together
+                </p>
+                <button 
+                  className="btn btn-primary"
+                  onClick={() => setShowCreateModal(true)}
+                >
+                  Create Your First Organization
+                </button>
+              </div>
+            ) : (
+              <>
+                {organizations.map((org) => (
+                  <div 
+                    key={org.id} 
+                    className="organization-card"
+                    onClick={() => navigate(`/organizations/${org.id}`)}
+                  >
+                    <div className="organization-card-header">
+                      <div className="organization-icon">
+                        {org.display_name.charAt(0).toUpperCase()}
+                      </div>
+                      {getRoleBadge(org.role)}
+                    </div>
+                    <div className="organization-card-content">
+                      <h3 className="organization-card-title">{org.display_name}</h3>
+                      {org.description && (
+                        <p className="organization-card-description">{org.description}</p>
+                      )}
+                    </div>
+                    <div className="organization-card-footer">
+                      <div className="organization-stat">
+                        <span className="stat-value">{org.member_count || 0}</span>
+                        <span className="stat-label">Members</span>
+                      </div>
+                      <div className="organization-stat">
+                        <span className="stat-value">{org.board_count || 0}</span>
+                        <span className="stat-label">Boards</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {/* Create Card */}
+                <div 
+                  className="organization-card organization-card-create"
+                  onClick={() => setShowCreateModal(true)}
+                >
+                  <div className="organization-card-create-content">
+                    <div className="organization-card-create-icon">+</div>
+                    <div className="organization-card-create-text">Create New Organization</div>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
       </div>
 
       {showCreateModal && (

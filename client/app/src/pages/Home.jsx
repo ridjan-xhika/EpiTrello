@@ -53,7 +53,7 @@ const Home = () => {
       <div className="home-hero">
         <div className="home-hero-content">
           <h1 className="home-hero-title">
-            Welcome back, {user?.username || 'User'}! 👋
+            Welcome back, {user?.username || 'User'}!
           </h1>
           <p className="home-hero-subtitle">
             Pick up where you left off or start a new project
@@ -66,21 +66,35 @@ const Home = () => {
         {/* Quick Stats */}
         <div className="home-stats">
           <div className="stat-card">
-            <div className="stat-icon">📋</div>
+            <div className="stat-icon">
+              <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25V1.75zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25H1.75z"></path>
+                <path d="M3.75 3a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5A.75.75 0 0 1 3.75 3zm4 0a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5A.75.75 0 0 1 7.75 3zm4 0a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5a.75.75 0 0 1 .75-.75z"></path>
+              </svg>
+            </div>
             <div className="stat-info">
               <div className="stat-number">{boards.length}</div>
               <div className="stat-label">Total Boards</div>
             </div>
           </div>
           <div className="stat-card">
-            <div className="stat-icon">📁</div>
+            <div className="stat-icon">
+              <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M2 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4zm2-.5a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5V4a.5.5 0 0 0-.5-.5H4z"></path>
+                <path d="M5 7a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 0 1.5h-4.5A.75.75 0 0 1 5 7zm0 2.5a.75.75 0 0 1 .75-.75h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1-.75-.75z"></path>
+              </svg>
+            </div>
             <div className="stat-info">
               <div className="stat-number">{boards.reduce((sum, b) => sum + (b.columnCount || 0), 0)}</div>
               <div className="stat-label">Total Lists</div>
             </div>
           </div>
           <div className="stat-card">
-            <div className="stat-icon">✨</div>
+            <div className="stat-icon">
+              <svg width="32" height="32" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16zm3.78-9.72a.751.751 0 0 0-.018-1.042.751.751 0 0 0-1.042-.018L6.75 9.19 5.28 7.72a.751.751 0 0 0-1.042.018.751.751 0 0 0-.018 1.042l2 2a.75.75 0 0 0 1.06 0l4.5-4.5z"></path>
+              </svg>
+            </div>
             <div className="stat-info">
               <div className="stat-number">Active</div>
               <div className="stat-label">Workspace</div>
@@ -105,13 +119,13 @@ const Home = () => {
                 onClick={() => navigate('/organizations')}
                 className="btn btn-secondary"
               >
-                🏢 Organizations
+                Organizations
               </button>
               <button
                 onClick={() => setIsModalOpen(true)}
                 className="btn btn-primary"
               >
-                ➕ Create Board
+                Create Board
               </button>
             </div>
           </div>
@@ -124,7 +138,12 @@ const Home = () => {
                 className="board-card"
               >
                 <div className="board-card-header">
-                  <div className="board-card-icon">📋</div>
+                  <div className="board-card-icon">
+                    <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+                      <path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25V1.75zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25H1.75z"></path>
+                      <path d="M3.75 3a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5A.75.75 0 0 1 3.75 3zm4 0a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5A.75.75 0 0 1 7.75 3zm4 0a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5a.75.75 0 0 1 .75-.75z"></path>
+                    </svg>
+                  </div>
                   <button
                     onClick={(e) => handleDeleteBoard(board.id, e)}
                     className="board-card-delete"
@@ -179,28 +198,44 @@ const Home = () => {
           <h2 className="features-title">Why Choose EpiTrello?</h2>
           <div className="features-grid">
             <div className="feature-card">
-              <div className="feature-icon">🎯</div>
+              <div className="feature-icon">
+                <svg width="48" height="48" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm9.78-2.22-5.5 5.5a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734l5.5-5.5a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"></path>
+                </svg>
+              </div>
               <h3 className="feature-title">Stay Organized</h3>
               <p className="feature-description">
                 Keep all your projects and tasks in one place with intuitive boards and lists.
               </p>
             </div>
             <div className="feature-card">
-              <div className="feature-icon">👥</div>
+              <div className="feature-icon">
+                <svg width="48" height="48" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M5.5 3.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.508 5.508 0 0 1 3.034 4.084.75.75 0 1 1-1.482.235 4 4 0 0 0-7.9 0 .75.75 0 0 1-1.482-.236A5.507 5.507 0 0 1 3.102 8.05 3.493 3.493 0 0 1 2 5.5ZM11 4a3.001 3.001 0 0 1 2.22 5.018 5.01 5.01 0 0 1 2.56 3.012.749.749 0 0 1-.885.954.752.752 0 0 1-.549-.514 3.507 3.507 0 0 0-2.522-2.372.75.75 0 0 1-.574-.73v-.352a.75.75 0 0 1 .416-.672A1.5 1.5 0 0 0 11 5.5.75.75 0 0 1 11 4Z"></path>
+                </svg>
+              </div>
               <h3 className="feature-title">Collaborate</h3>
               <p className="feature-description">
                 Work together with your team in real-time and share boards effortlessly.
               </p>
             </div>
             <div className="feature-card">
-              <div className="feature-icon">📊</div>
+              <div className="feature-icon">
+                <svg width="48" height="48" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25V1.75C0 .784.784 0 1.75 0ZM1.5 1.75v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25ZM11.75 3a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5a.75.75 0 0 1 .75-.75Zm-8.25.75a.75.75 0 0 1 1.5 0v7.5a.75.75 0 0 1-1.5 0v-7.5ZM8 3a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5A.75.75 0 0 1 8 3Z"></path>
+                </svg>
+              </div>
               <h3 className="feature-title">Multiple Views</h3>
               <p className="feature-description">
                 Switch between board, list, calendar, and table views to match your workflow.
               </p>
             </div>
             <div className="feature-card">
-              <div className="feature-icon">🔒</div>
+              <div className="feature-icon">
+                <svg width="48" height="48" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M4 4a4 4 0 0 1 8 0v2h.25c.966 0 1.75.784 1.75 1.75v5.5A1.75 1.75 0 0 1 12.25 15h-8.5A1.75 1.75 0 0 1 2 13.25v-5.5C2 6.784 2.784 6 3.75 6H4Zm8.25 3.5h-8.5a.25.25 0 0 0-.25.25v5.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-5.5a.25.25 0 0 0-.25-.25ZM10.5 6V4a2.5 2.5 0 1 0-5 0v2Z"></path>
+                </svg>
+              </div>
               <h3 className="feature-title">Secure</h3>
               <p className="feature-description">
                 Your data is protected with enterprise-grade security and permissions.
