@@ -115,6 +115,7 @@
   transition: all 0.2s ease;
   flex-shrink: 0;
   width: calc(100% - 20px);
+  text-decoration: none;
 }
 
 .add-card-button:hover {
@@ -122,7 +123,8 @@
   border-color: var(--primary-blue);
   color: var(--primary-blue);
   transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(76, 154, 255, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 121, 191, 0.15);
+  text-decoration: none;
 }
 
 .add-card-form {

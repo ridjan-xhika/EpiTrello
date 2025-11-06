@@ -70,11 +70,13 @@
   font-weight: 400;
   color: var(--text-primary);
   transition: all 0.15s ease;
+  text-decoration: none;
 }
 
 .add-column-button:hover {
   background: var(--bg-active);
   color: var(--text-primary);
+  text-decoration: none;
 }
 
 .add-column-form {
