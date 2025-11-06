@@ -1,11 +1,11 @@
-/* Professional Trello-like Authentication Styles */
+/* Professional Trello-style Authentication */
 
 .auth-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: var(--primary-gradient);
+  background: var(--bg-secondary);
   padding: 20px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   transition: background 0.2s ease;
@@ -14,18 +14,19 @@
 .auth-card {
   background: var(--bg-primary);
   padding: 40px;
-  border-radius: 8px;
-  box-shadow: var(--shadow-xl);
+  border-radius: 3px;
+  box-shadow: var(--shadow-lg);
   width: 100%;
   max-width: 400px;
-  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideIn 0.2s ease;
   transition: background 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid var(--border-primary);
 }
 
 @keyframes slideIn {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-10px);
   }
   to {
     opacity: 1;
@@ -35,18 +36,17 @@
 
 .auth-header {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .trello-logo {
-  margin-bottom: 24px;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  margin-bottom: 16px;
 }
 
 .auth-header h1 {
   color: var(--text-primary);
-  margin: 0 0 8px 0;
-  font-size: 28px;
+  margin: 0 0 4px 0;
+  font-size: 24px;
   font-weight: 600;
   letter-spacing: -0.5px;
 }

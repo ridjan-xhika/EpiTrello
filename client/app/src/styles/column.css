@@ -1,38 +1,25 @@
+/* Professional Trello-style Columns */
 .column {
   background: var(--bg-tertiary);
-  border-radius: 12px;
-  width: 280px;
-  max-height: calc(100vh - 100px);
+  border-radius: 8px;
+  width: 272px;
+  max-height: calc(100vh - 120px);
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-card);
   overflow-y: auto;
   overflow-x: hidden;
-  transition: all 0.2s ease;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.15s ease;
   position: relative;
 }
 
 .column::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-  border-radius: 12px 12px 0 0;
-  opacity: 0;
-  transition: opacity 0.2s ease;
+  display: none;
 }
 
 .column:hover {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
-}
-
-.column:hover::before {
-  opacity: 1;
+  box-shadow: var(--shadow-md);
 }
 
 .column::-webkit-scrollbar {
@@ -53,7 +40,7 @@
 }
 
 .column-header {
-  padding: 16px 14px 12px;
+  padding: 10px 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -63,21 +50,18 @@
   top: 0;
   z-index: 2;
   transition: background 0.2s ease;
-  border-bottom: 2px solid transparent;
 }
 
 .column:hover .column-header {
-  border-bottom-color: rgba(102, 126, 234, 0.2);
+  border-bottom-color: transparent;
 }
 
 .column-title {
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
   margin: 0;
   color: var(--text-primary);
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  font-size: 13px;
+  letter-spacing: -0.01em;
 }
 
 .column-delete {
@@ -86,14 +70,14 @@
   font-size: 18px;
   color: var(--text-secondary);
   cursor: pointer;
-  padding: 0;
-  width: 28px;
-  height: 28px;
+  padding: 4px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  border-radius: 3px;
+  transition: all 0.15s ease;
   opacity: 0;
 }
 
@@ -102,14 +86,13 @@
 }
 
 .column-delete:hover {
-  background: rgba(235, 90, 70, 0.1);
-  color: #eb5a46;
-  transform: scale(1.15) rotate(90deg);
+  background: var(--bg-hover);
+  color: var(--error);
 }
 
 .column-cards {
   flex: 1;
-  padding: 4px 10px 10px;
+  padding: 0 8px 8px;
   min-height: 0;
 }
 

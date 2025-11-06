@@ -1,64 +1,72 @@
+/* Organization Detail - Professional Trello Style */
+
 .organization-detail-page {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+  background: var(--bg-secondary);
+  min-height: 100vh;
 }
 
 .organization-header {
   background: var(--bg-primary);
-  border-radius: 12px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-card);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
+  border: 1px solid var(--border-primary);
 }
 
 .organization-header-left {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
   flex: 1;
 }
 
 .organization-icon-large {
-  width: 80px;
-  height: 80px;
-  border-radius: 12px;
+  width: 64px;
+  height: 64px;
+  border-radius: 3px;
   background: var(--primary-gradient);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.5rem;
-  font-weight: bold;
+  font-size: 2rem;
+  font-weight: 600;
   flex-shrink: 0;
 }
 
 .organization-header h1 {
   color: var(--text-primary);
-  font-size: 2rem;
-  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  margin: 0 0 4px 0;
 }
 
 .organization-description {
   color: var(--text-secondary);
   margin: 0;
   line-height: 1.5;
+  font-size: 0.875rem;
 }
 
 .organization-header-actions {
   display: flex;
-  gap: 0.75rem;
+  gap: 8px;
   flex-shrink: 0;
 }
 
 .organization-tabs {
   display: flex;
-  gap: 0.5rem;
-  border-bottom: 2px solid #e4e6ea;
+  gap: 4px;
+  border-bottom: 2px solid var(--border-primary);
   margin-bottom: 2rem;
 }
 
@@ -171,13 +179,13 @@
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: #f4f5f7;
+  background: var(--bg-secondary);
   border-radius: 8px;
   transition: background 0.2s;
 }
 
 .member-item:hover {
-  background: #e4e6ea;
+  background: var(--bg-tertiary);
 }
 
 .member-avatar {
@@ -218,7 +226,7 @@
 
 .role-select {
   padding: 0.5rem 0.75rem;
-  border: 2px solid #e4e6ea;
+  border: 2px solid var(--border-primary);
   border-radius: 6px;
   color: var(--text-primary) !important;
   font-size: 0.9rem;
@@ -250,15 +258,15 @@
 }
 
 .btn-danger-icon {
-  color: #eb5a46;
+  color: var(--error);
 }
 
 .btn-icon:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--bg-secondary);
 }
 
 .btn-danger-icon:hover {
-  background: #eb5a46;
+  background: var(--error);
   color: white;
 }
 
@@ -284,23 +292,23 @@
 }
 
 .btn-secondary {
-  background: #e4e6ea;
+  background: var(--bg-secondary);
   color: var(--text-primary);
 }
 
 .btn-secondary:hover {
-  background: #d4d6da;
+  background: var(--bg-tertiary);
 }
 
 .btn-danger {
-  background: #eb5a46;
+  background: var(--error);
   color: white;
 }
 
 .btn-danger:hover {
-  background: #d94436;
+  background: var(--error-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(235, 90, 70, 0.3);
+  box-shadow: var(--shadow-md);
 }
 
 /* Modal Styles */

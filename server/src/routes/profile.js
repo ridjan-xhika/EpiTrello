@@ -66,6 +66,8 @@ router.put('/me', auth, async (req, res) => {
   try {
     const { name, username, email, bio } = req.body;
 
+    console.log('Update profile request received:', { name, username, email, bio: bio?.substring(0, 50) });
+
     // Check if username is taken by another user
     if (username) {
       const existingUser = await User.findByUsername(username);
@@ -85,6 +87,12 @@ router.put('/me', auth, async (req, res) => {
     await User.updateProfile(req.userId, { name, username, email, bio });
 
     const updatedUser = await User.findById(req.userId);
+
+    console.log('Profile updated successfully, returning:', { 
+      id: updatedUser.id, 
+      name: updatedUser.name,
+      bio: updatedUser.bio?.substring(0, 50)
+    });
 
     res.json({
       message: 'Profile updated successfully',

@@ -29,7 +29,7 @@ class User {
 
   static async findById(id) {
     const [rows] = await db.execute(
-      'SELECT id, username, email, name, created_at FROM users WHERE id = ?',
+      'SELECT id, username, email, name, bio, created_at FROM users WHERE id = ?',
       [id]
     );
     return rows[0];
@@ -71,10 +71,14 @@ class User {
     if (updates.length === 0) return;
 
     values.push(userId);
-    await db.execute(
-      `UPDATE users SET ${updates.join(', ')} WHERE id = ?`,
-      values
-    );
+    
+    const query = `UPDATE users SET ${updates.join(', ')} WHERE id = ?`;
+    console.log('Executing update query:', query);
+    console.log('With values:', values.map((v, i) => i === values.length - 1 ? `userId: ${v}` : `${v?.substring ? v.substring(0, 50) : v}`));
+    
+    await db.execute(query, values);
+    
+    console.log('Update executed successfully');
   }
 
   static async updatePassword(userId, newPassword) {

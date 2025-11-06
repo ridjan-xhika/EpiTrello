@@ -1,61 +1,67 @@
+/* Organizations Page - Professional Trello Style */
+
 .organizations-page {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+  background: var(--bg-secondary);
+  min-height: 100vh;
 }
 
 .organizations-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .organizations-header h1 {
   color: var(--text-primary);
-  font-size: 2rem;
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.5px;
   margin: 0;
 }
 
 .organizations-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
+  gap: 12px;
 }
 
 .organization-card {
   background: var(--bg-primary);
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s;
+  border-radius: 3px;
+  padding: 16px;
+  box-shadow: var(--shadow-card);
+  transition: all 0.15s;
   cursor: pointer;
   border: 1px solid var(--border-primary);
 }
 
 .organization-card:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  background: var(--bg-primary);
 }
 
 .organization-card-header {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .organization-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  border-radius: 3px;
   background: var(--primary-gradient);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 1.25rem;
+  font-weight: 600;
   flex-shrink: 0;
 }
 
@@ -66,17 +72,19 @@
 
 .organization-info h3 {
   color: var(--text-primary);
-  font-size: 1.1rem;
-  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 4px 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: -0.25px;
 }
 
 .organization-description {
   color: var(--text-secondary);
-  font-size: 0.9rem;
-  margin: 0 0 1rem 0;
+  font-size: 0.875rem;
+  margin: 0 0 12px 0;
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -86,8 +94,8 @@
 
 .organization-stats {
   display: flex;
-  gap: 2rem;
-  padding-top: 1rem;
+  gap: 1.5rem;
+  padding-top: 12px;
   border-top: 1px solid var(--border-primary);
 }
 
@@ -99,13 +107,13 @@
 
 .stat-value {
   color: var(--text-primary);
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
 }
 
 .stat-label {
   color: var(--text-secondary);
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -114,9 +122,9 @@
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.25rem 0.75rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 0.6875rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -124,7 +132,7 @@
 
 .role-gold {
   background: var(--owner-gradient);
-  color: #7a5d00;
+  color: var(--text-on-gradient);
 }
 
 .role-purple {
@@ -140,21 +148,24 @@
 .empty-state {
   grid-column: 1 / -1;
   text-align: center;
-  padding: 4rem 2rem;
+  padding: 3rem 2rem;
   background: var(--bg-primary);
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  box-shadow: var(--shadow-card);
   border: 1px solid var(--border-primary);
 }
 
 .empty-state h2 {
   color: var(--text-primary);
   margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
 }
 
 .empty-state p {
   color: var(--text-secondary);
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
 }
 
 /* Modal Styles */
@@ -164,7 +175,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--bg-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -174,19 +185,20 @@
 
 .modal-content {
   background: var(--bg-primary);
-  border-radius: 12px;
+  border-radius: 3px;
   max-width: 500px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--border-primary);
 }
 
 .modal-header {
-  background: var(--primary-gradient);
-  color: white;
-  padding: 1.5rem;
-  border-radius: 12px 12px 0 0;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-primary);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -194,28 +206,31 @@
 
 .modal-header h2 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.5px;
 }
 
 .modal-close {
   background: none;
   border: none;
-  color: white;
-  font-size: 2rem;
+  color: var(--text-secondary);
+  font-size: 1.5rem;
   line-height: 1;
   cursor: pointer;
-  opacity: 0.8;
-  transition: opacity 0.2s;
+  transition: color 0.15s;
   padding: 0;
   width: 32px;
   height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 3px;
 }
 
 .modal-close:hover {
-  opacity: 1;
+  background: var(--bg-hover);
+  color: var(--text-primary);
 }
 
 .organization-form {
@@ -223,28 +238,30 @@
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .form-group label {
   display: block;
   color: var(--text-primary);
   font-weight: 600;
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
+  margin-bottom: 4px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .form-input,
 .form-textarea,
 .form-select {
   width: 100%;
-  padding: 0.75rem;
-  border: 2px solid var(--border-primary);
-  border-radius: 6px;
-  font-size: 1rem;
+  padding: 8px 12px;
+  border: 1px solid var(--input-border);
+  border-radius: 3px;
+  font-size: 14px;
   color: var(--input-text) !important;
   background: var(--input-bg);
-  transition: border-color 0.2s;
+  transition: all 0.15s;
   font-family: inherit;
 }
 
@@ -252,45 +269,48 @@
 .form-textarea:focus,
 .form-select:focus {
   outline: none;
-  border-color: var(--primary-blue);
+  border-color: var(--input-border-focus);
+  box-shadow: 0 0 0 1px var(--input-border-focus);
+  background: var(--bg-primary);
 }
 
 .form-hint {
   display: block;
-  margin-top: 0.5rem;
+  margin-top: 4px;
   color: var(--text-secondary);
-  font-size: 0.85rem;
+  font-size: 0.75rem;
 }
 
 .form-actions {
   display: flex;
-  gap: 0.75rem;
+  gap: 8px;
   justify-content: flex-end;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-primary);
 }
 
 /* Button Styles */
 .btn {
-  padding: 0.75rem 1.5rem;
+  padding: 6px 12px;
   border: none;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  font-weight: 600;
+  border-radius: 3px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.15s;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 6px;
 }
 
 .btn-primary {
-  background: var(--primary-gradient);
-  color: white;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
 }
 
 .btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 121, 191, 0.3);
+  background: var(--btn-primary-hover);
 }
 
 .btn-secondary {
@@ -309,15 +329,13 @@
 
 .btn-danger:hover {
   background: var(--btn-danger-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(235, 90, 70, 0.3);
 }
 
 .loading {
   text-align: center;
-  padding: 4rem 2rem;
+  padding: 3rem 2rem;
   color: var(--text-secondary);
-  font-size: 1.1rem;
+  font-size: 0.875rem;
 }
 
 @media (max-width: 768px) {

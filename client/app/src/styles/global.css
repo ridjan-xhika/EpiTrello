@@ -1,52 +1,53 @@
 /* ============================================================================
-   CSS VARIABLES - LIGHT THEME (DEFAULT)
+   CSS VARIABLES - LIGHT THEME (Trello-Inspired Design)
    ============================================================================ */
 :root[data-theme="light"] {
-  /* Primary Colors */
+  /* Primary Colors - Authentic Trello Blue */
   --primary-blue: #0079bf;
   --primary-blue-hover: #026aa7;
   --primary-blue-dark: #055a8c;
-  --primary-gradient: linear-gradient(135deg, #0079bf 0%, #5067c5 100%);
-  --success-gradient: linear-gradient(135deg, #5aac44 0%, #61bd4f 100%);
-  --avatar-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  --owner-gradient: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-  --admin-gradient: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  --primary-gradient: linear-gradient(135deg, #0079bf 0%, #026aa7 100%);
+  --success-gradient: linear-gradient(135deg, #61bd4f 0%, #5aac44 100%);
+  --avatar-gradient: linear-gradient(135deg, #cd519d 0%, #e774bb 100%);
+  --owner-gradient: linear-gradient(135deg, #f2d600 0%, #dfc600 100%);
+  --admin-gradient: linear-gradient(135deg, #c377e0 0%, #9f7aea 100%);
   --write-gradient: linear-gradient(135deg, #0079bf 0%, #026aa7 100%);
   
-  /* Background Colors */
+  /* Background Colors - Clean & Minimal */
   --bg-primary: #ffffff;
   --bg-secondary: #f4f5f7;
   --bg-tertiary: #ebecf0;
-  --bg-hover: #f4f5f7;
-  --bg-active: #e4e6ea;
-  --bg-overlay: rgba(0, 0, 0, 0.64);
+  --bg-hover: #091e420a;
+  --bg-active: #091e4214;
+  --bg-overlay: rgba(0, 0, 0, 0.5);
   
-  /* Text Colors */
+  /* Text Colors - High Contrast */
   --text-primary: #172b4d;
   --text-secondary: #5e6c84;
-  --text-muted: #8993a4;
+  --text-muted: #6b778c;
   --text-inverse: #ffffff;
   --text-link: #0079bf;
   
   /* Border Colors */
-  --border-primary: #dfe1e6;
-  --border-secondary: #c1c7d0;
+  --border-primary: #091e4224;
+  --border-secondary: #091e4214;
   --border-focus: #0079bf;
+  --border-color: #091e4224;
   
   /* Input Colors */
   --input-bg: #fafbfc;
-  --input-border: #dfe1e6;
-  --input-border-hover: #c1c7d0;
+  --input-border: #091e4224;
+  --input-border-hover: #091e4233;
   --input-border-focus: #0079bf;
   --input-text: #172b4d;
-  --input-placeholder: #8993a4;
+  --input-placeholder: #6b778c;
   
   /* Button Colors */
   --btn-primary-bg: #0079bf;
   --btn-primary-hover: #026aa7;
   --btn-primary-text: #ffffff;
-  --btn-secondary-bg: rgba(9, 30, 66, 0.08);
-  --btn-secondary-hover: rgba(9, 30, 66, 0.13);
+  --btn-secondary-bg: #091e420a;
+  --btn-secondary-hover: #091e4214;
   --btn-secondary-text: #172b4d;
   --btn-danger-bg: #eb5a46;
   --btn-danger-hover: #cf513d;
@@ -55,87 +56,105 @@
   --success: #61bd4f;
   --warning: #f2d600;
   --error: #eb5a46;
+  --error-hover: #cf513d;
   --info: #0079bf;
   
-  /* Shadow */
-  --shadow-sm: 0 1px 2px rgba(9, 30, 66, 0.08);
-  --shadow-md: 0 2px 4px rgba(9, 30, 66, 0.12);
-  --shadow-lg: 0 4px 8px rgba(9, 30, 66, 0.16);
-  --shadow-xl: 0 8px 16px rgba(9, 30, 66, 0.20);
-  --shadow-card: 0 1px 0 rgba(9, 30, 66, 0.25);
+  /* Additional Colors */
+  --text-on-gradient: #172b4d;
+  
+  /* Shadow - Subtle Depth */
+  --shadow-sm: 0 1px 1px #091e4240, 0 0 1px #091e424f;
+  --shadow-md: 0 1px 2px #091e4240, 0 0 1px #091e424f;
+  --shadow-lg: 0 8px 12px #091e4226, 0 0 1px #091e424f;
+  --shadow-xl: 0 12px 24px -6px #091e4233, 0 0 1px #091e424f;
+  --shadow-card: 0 1px 2px #091e4240, 0 0 1px #091e424f;
   
   /* Board Background */
   --board-bg: #0079bf;
+  
+  /* Navbar */
+  --navbar-bg: #026aa7;
+  --navbar-text: #ffffff;
 }
 
 /* ============================================================================
-   CSS VARIABLES - DARK THEME
+   CSS VARIABLES - DARK THEME (Premium Dark Mode)
    ============================================================================ */
 :root[data-theme="dark"] {
-  /* Primary Colors */
-  --primary-blue: #4c9aff;
-  --primary-blue-hover: #2684ff;
-  --primary-blue-dark: #0065ff;
-  --primary-gradient: linear-gradient(135deg, #4c9aff 0%, #6b8dd6 100%);
-  --success-gradient: linear-gradient(135deg, #7ee2b8 0%, #61e9a1 100%);
-  --avatar-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  --owner-gradient: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-  --admin-gradient: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
-  --write-gradient: linear-gradient(135deg, #4c9aff 0%, #2684ff 100%);
+  /* Primary Colors - Vibrant but Professional */
+  --primary-blue: #579dff;
+  --primary-blue-hover: #85b8ff;
+  --primary-blue-dark: #388bff;
+  --primary-gradient: linear-gradient(135deg, #579dff 0%, #85b8ff 100%);
+  --success-gradient: linear-gradient(135deg, #4bce97 0%, #7ee2b8 100%);
+  --avatar-gradient: linear-gradient(135deg, #e774bb 0%, #f797d3 100%);
+  --owner-gradient: linear-gradient(135deg, #f5cd47 0%, #ffc400 100%);
+  --admin-gradient: linear-gradient(135deg, #9f8fef 0%, #b8a6f5 100%);
+  --write-gradient: linear-gradient(135deg, #579dff 0%, #85b8ff 100%);
   
-  /* Background Colors */
+  /* Background Colors - Rich, Not Stark */
   --bg-primary: #1d2125;
   --bg-secondary: #282e33;
   --bg-tertiary: #22272b;
-  --bg-hover: #2c3439;
-  --bg-active: #363d42;
-  --bg-overlay: rgba(0, 0, 0, 0.80);
+  --bg-hover: #a6c5e229;
+  --bg-active: #bfdbf847;
+  --bg-overlay: rgba(0, 0, 0, 0.7);
   
-  /* Text Colors */
+  /* Text Colors - Optimized Readability */
   --text-primary: #b6c2cf;
   --text-secondary: #9fadbc;
   --text-muted: #8c9bab;
   --text-inverse: #1d2125;
-  --text-link: #4c9aff;
+  --text-link: #579dff;
   
-  /* Border Colors */
-  --border-primary: #38414a;
-  --border-secondary: #454f59;
-  --border-focus: #4c9aff;
+  /* Border Colors - Defined but Subtle */
+  --border-primary: #a1bdd914;
+  --border-secondary: #a6c5e229;
+  --border-focus: #579dff;
+  --border-color: #a1bdd914;
   
   /* Input Colors */
   --input-bg: #22272b;
-  --input-border: #38414a;
-  --input-border-hover: #454f59;
-  --input-border-focus: #4c9aff;
+  --input-border: #a1bdd914;
+  --input-border-hover: #a6c5e229;
+  --input-border-focus: #579dff;
   --input-text: #b6c2cf;
   --input-placeholder: #8c9bab;
   
   /* Button Colors */
-  --btn-primary-bg: #4c9aff;
-  --btn-primary-hover: #2684ff;
+  --btn-primary-bg: #579dff;
+  --btn-primary-hover: #85b8ff;
   --btn-primary-text: #1d2125;
-  --btn-secondary-bg: rgba(255, 255, 255, 0.08);
-  --btn-secondary-hover: rgba(255, 255, 255, 0.12);
+  --btn-secondary-bg: #a6c5e229;
+  --btn-secondary-hover: #bfdbf847;
   --btn-secondary-text: #b6c2cf;
-  --btn-danger-bg: #f87168;
-  --btn-danger-hover: #f15b50;
+  --btn-danger-bg: #f87462;
+  --btn-danger-hover: #ff9c8f;
   
   /* Status Colors */
-  --success: #7ee2b8;
+  --success: #4bce97;
   --warning: #f5cd47;
-  --error: #f87168;
-  --info: #4c9aff;
+  --error: #f87462;
+  --error-hover: #ff9c8f;
+  --info: #579dff;
   
-  /* Shadow */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.20);
-  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.30);
-  --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.40);
-  --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.50);
-  --shadow-card: 0 1px 0 rgba(0, 0, 0, 0.40);
+  /* Additional Colors */
+  --text-on-gradient: #1d2125;
+  
+  /* Shadow - Depth in Dark Mode */
+  --shadow-sm: 0 1px 1px #0304045e, 0 0 1px #03040480;
+  --shadow-md: 0 2px 4px #0304045e, 0 0 1px #03040480;
+  --shadow-lg: 0 8px 12px #03040480, 0 0 1px #03040480;
+  --shadow-xl: 0 12px 24px #03040480, 0 0 1px #03040480;
+  --shadow-card: 0 1px 2px #0304045e, 0 0 1px #03040480;
   
   /* Board Background */
   --board-bg: #1d2125;
+  --color: #b6c2cf;
+  
+  /* Navbar */
+  --navbar-bg: #1d2125;
+  --navbar-text: #b6c2cf;
 }
 
 /* ============================================================================

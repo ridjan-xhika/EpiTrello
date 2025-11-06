@@ -37,6 +37,7 @@ const Profile = () => {
     try {
       setLoading(true);
       const { user } = await api.getProfile();
+      console.log('Loaded profile:', user);
       setProfile({
         name: user.name || '',
         username: user.username || '',
@@ -44,6 +45,7 @@ const Profile = () => {
         bio: user.bio || ''
       });
     } catch (err) {
+      console.error('Failed to load profile:', err);
       setError('Failed to load profile');
     } finally {
       setLoading(false);
@@ -72,13 +74,24 @@ const Profile = () => {
       return;
     }
 
+    console.log('Submitting profile data:', profile);
+
     try {
       setSaving(true);
       const { user } = await api.updateProfile(profile);
+      console.log('Profile updated, received:', user);
       updateUser(user);
+      setProfile({
+        name: user.name || '',
+        username: user.username || '',
+        email: user.email || '',
+        bio: user.bio || ''
+      });
+      setEditingBio(false); // Exit edit mode after save
       setSuccess('Profile updated successfully! ✓');
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
+      console.error('Profile update error:', err);
       setError(err.message);
     } finally {
       setSaving(false);
